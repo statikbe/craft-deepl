@@ -1,0 +1,41 @@
+{
+    "name": "statikbe/craft-deepl", 
+    "description": "Deepl integration for Craft CMS",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "translate"
+    ],
+    "support": {
+        "docs": "https://github.com/statikbe/deepl/blob/master/README.md",
+        "issues": "https://github.com/statikbe/deepl/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Statik",
+            "homepage": "https://www.statik.be"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^4.0.0-beta.1",
+        "deeplcom/deepl-php": "v0.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "statikbe\\deepl\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Deepl",
+        "handle": "deepl",
+        "schemaVersion": "1.0.0",
+        "hasSettings": true,
+        "developer": "Statik",
+        "class": "statikbe\\deepl\\deepl"
+    }
+}
