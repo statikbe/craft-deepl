@@ -8,11 +8,13 @@ use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
 use statikbe\deepl\services\ApiService;
+use statikbe\deepl\services\MapperService;
 use yii\base\Event;
 
 
 /**
  * @property ApiService api
+ * @property MapperService mapper
  */
 class Deepl extends Plugin {
 
@@ -41,6 +43,7 @@ class Deepl extends Plugin {
 
         $this->setComponents([
             'api' => ApiService::class,
+            'mapper' => MapperService::class
         ]);
 
 

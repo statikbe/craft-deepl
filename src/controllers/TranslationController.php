@@ -20,10 +20,22 @@ class TranslationController extends Controller
 
 
         $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
-        $result = Deepl::getInstance()->api->translateString(
+
+        //Handle different section propagation methods ?
+        $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
+        $newTitle = Deepl::getInstance()->api->translateString(
             $sourceEntry->title,
             Deepl::getInstance()->api->getLanguageString($sourceSite->language),
             Deepl::getInstance()->api->getLanguageString($destinationSite->language)
         );
+        $targetEntry->title = $newTitle;
+
+        // Save the translated version of the entry as a new draft
+        Craft::$app->getDrafts()->saveElementAsDraft($targetEntry, Craft::$app->getUser()->getIdentity()->id);
+
+        // Redirect to the translated entry
+        return $this->redirect($targetEntry->getCpEditUrl());
+
+
     }
 }
