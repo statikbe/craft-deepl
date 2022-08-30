@@ -45,7 +45,7 @@ class MapperService extends Component
                     $targetEntry->setFieldValue($field['handle'], $translation);
                 }
             } catch (FieldNotFoundException $e) {
-                dd($e);
+                Craft::error("Fieldtype not supported: " . get_class($field), __CLASS__);
             }
         }
         return $targetEntry;
