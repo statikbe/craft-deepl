@@ -17,23 +17,39 @@ class ApiService extends Component
 
     public function translateString($text, $sourceLang, $targetLang)
     {
-        return $this->translator->translateText(
+        $translation = $this->translator->translateText(
             $text,
-            $sourceLang,
-            $targetLang
+            $this->getLanguageString($sourceLang, false),
+            $this->getLanguageString($targetLang, true)
         );
+
+        return $translation->text;
+
     }
 
-    public function getLanguageString($string): string
+    public function getTargetLanguages()
+    {
+        return $this->translator->getTargetLanguages();
+    }
+
+    public function getSourceLanguages()
+    {
+        return $this->translator->getSourceLanguages();
+    }
+
+    public function getLanguageString($string, bool $isTarget = true): string
     {
         $str = explode('-', $string);
         $lang = $str[0];
-        if (!in_array($lang, ['en'])) {
-            return $lang;
-        }
 
         if ($lang === 'en') {
-            return 'en-US';
+            if ($isTarget) {
+                return 'en-GB';
+            } else {
+                return "EN";
+            }
         }
+
+        return strtoupper($lang);
     }
 }

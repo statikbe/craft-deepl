@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace statikbe\deepl;
 
@@ -8,6 +8,7 @@ use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
 use statikbe\deepl\services\ApiService;
+use statikbe\deepl\services\fields\Redactor;
 use statikbe\deepl\services\MapperService;
 use yii\base\Event;
 
@@ -15,8 +16,10 @@ use yii\base\Event;
 /**
  * @property ApiService api
  * @property MapperService mapper
+ * @property Redactor redactor
  */
-class Deepl extends Plugin {
+class Deepl extends Plugin
+{
 
     public bool $hasCpSection = false;
 
@@ -34,8 +37,11 @@ class Deepl extends Plugin {
         Event::on(
             Entry::class,
             Entry::EVENT_DEFINE_SIDEBAR_HTML,
-            function(DefineHtmlEvent $event) {
+            function (DefineHtmlEvent $event) {
                 /** @var Entry $entry */
+                if ($event->sender->getIsDraft()) {
+                    return;
+                }
                 $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_sidebar', ["entry" => $event->sender]);
                 $event->html .= $template;
             }
@@ -43,9 +49,9 @@ class Deepl extends Plugin {
 
         $this->setComponents([
             'api' => ApiService::class,
-            'mapper' => MapperService::class
+            'mapper' => MapperService::class,
+            'redactor' => Redactor::class,
         ]);
-
 
 
     }

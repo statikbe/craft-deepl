@@ -4,7 +4,10 @@ namespace statikbe\deepl\services;
 
 use craft\base\Component;
 use craft\elements\Entry;
+use craft\errors\FieldNotFoundException;
 use DeepL\Translator;
+use statikbe\deepl\Deepl;
+use Craft;
 
 class MapperService extends Component
 {
@@ -14,27 +17,43 @@ class MapperService extends Component
 
     }
 
-    public function entryMapper(Entry $entry) {
+    public function entryMapper(Entry $sourceEntry, Entry $targetEntry)
+    {
+        $sourceSite = Craft::$app->getSites()->getSiteById($sourceEntry->siteId);
+        $targetSite = Craft::$app->getSites()->getSiteById($targetEntry->siteId);
 
-        $entry->getFieldLayout();
-        if ($entryType->fieldLayoutId) {
-            $typeFields = Craft::$app->fields->getFieldsByLayoutId($entryType->getFieldLayoutId());
+
+        $fieldLayoutId = $targetEntry->getFieldLayout()->id;
+        if (!$fieldLayoutId) {
+            // Throw exception
         }
-        $entry = new Entry([
-            'sectionId' => (int)$section->id,
-            'siteId' => $siteId ? $siteId : Craft::$app->getSites()->getPrimarySite()->id,
-            'typeId' => $entryType->id,
-            'title' => Seeder::$plugin->fields->Title(),
-        ]);
-        Craft::$app->getElements()->saveElement($entry);
-        Seeder::$plugin->seeder->saveSeededEntry($entry);
-        if ($entryType->fieldLayoutId) {
-            $entry = Seeder::$plugin->seeder->populateFields($typeFields, $entry);
-            $entry->updateTitle();
-            $entry->slug = '';
-            Craft::$app->getElements()->saveElement($entry);
+
+        $layout = Craft::$app->getFields()->getLayoutById($fieldLayoutId);
+
+
+        foreach ($layout->getCustomFields() as $field) {
+            try {
+                $fieldData = $this->isFieldSupported($field);
+                if ($fieldData) {
+                    $fieldProvider = $fieldData[0];
+                    $fieldType = $fieldData[1];
+                    $translation = Deepl::getInstance()->$fieldProvider->$fieldType(
+                        $field,
+                        $sourceEntry,
+                        $sourceSite,
+                        $targetSite
+                    );
+                    $targetEntry->setFieldValue($field['handle'], $translation);
+                }
+            } catch (FieldNotFoundException $e) {
+                dd($e);
+                //Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
+            }
+            break;
         }
+        return $targetEntry;
     }
+
 
     private function isFieldSupported($field)
     {
@@ -46,18 +65,14 @@ class MapperService extends Component
             if (in_array($fieldType, get_class_methods(Deepl::getInstance()->$fieldProvider))) {
                 return [$fieldProvider, $fieldType];
             } else {
-                if (Seeder::$plugin->getSettings()->debug) {
-                    throw new FieldNotFoundException('Fieldtype not supported: ' . $fieldType);
-                } else {
-                    Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
-                }
+                throw new FieldNotFoundException("Field not suppurted");
+//                Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
+                return false;
             }
         } else {
-//            if (Seeder::$plugin->getSettings()->debug) {
-//                throw new FieldNotFoundException('Fieldtype not supported: ' . $fieldType);
-//            } else {
-//                Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
-//            }
+            throw new FieldNotFoundException("Field not suppurted");
+//            Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
+            return false;
         }
     }
 }
