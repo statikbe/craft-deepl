@@ -30,7 +30,6 @@ class MapperService extends Component
 
         $layout = Craft::$app->getFields()->getLayoutById($fieldLayoutId);
 
-
         foreach ($layout->getCustomFields() as $field) {
             try {
                 $fieldData = $this->isFieldSupported($field);
@@ -47,9 +46,7 @@ class MapperService extends Component
                 }
             } catch (FieldNotFoundException $e) {
                 dd($e);
-                //Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
             }
-            break;
         }
         return $targetEntry;
     }
@@ -67,12 +64,10 @@ class MapperService extends Component
             } else {
                 throw new FieldNotFoundException("Field not suppurted");
 //                Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
-                return false;
             }
         } else {
             throw new FieldNotFoundException("Field not suppurted");
 //            Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
-            return false;
         }
     }
 }
