@@ -32,7 +32,6 @@ class TranslationController extends Controller
         $targetEntry->title = $newTitle;
 
         $targetEntry = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
-
         // Save the translated version of the entry as a new draft
         Craft::$app->getDrafts()->saveElementAsDraft($targetEntry, Craft::$app->getUser()->getIdentity()->id);
 

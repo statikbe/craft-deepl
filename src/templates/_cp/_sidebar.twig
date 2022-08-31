@@ -1,37 +1,27 @@
 <fieldset>
     <legend class="h6">{{ "Deepl" }}</legend>
     <div class="meta">
-
         {% set siteParam = craft.app.request.getParam('site') %}
         {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
-
-        {# Change this to only sites the current section is enabled for #}
         {% set otherSites = entry.section.siteSettings|filter(v => v.id != selectedSite.id) %}
-        
+
         {% for site in otherSites %}
             {% set site = craft.app.sites.getSiteById(site.id) %}
-            <div id="postDate-field" class="field">
+            <div class="field">
                 <div class="heading">
-                    <label id="postDate-label" for="postDate">{{ "Translation options" }}</label></div>
-
+                    <label>{{ "Translation options" }}</label></div>
                 <div class="input ltr">
-                    <div class="datetimewrapper">
-
+                    <div class="wrapper">
                         <div class="btngroup flex">
                             <div>
-
-                                <a href="{{ actionUrl('deepl/translation/index', {'entry': entry.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}" class="btn ">
+                                <a href="{{ actionUrl('deepl/translation/index', {'entry': entry.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
+                                   class="btn ">
                                     {{ "From {otherLocale} to {currentLocale}"|t('app', { otherLocale: site.locale, currentLocale: selectedSite.locale }) }}
                                 </a>
-
                             </div>
                         </div>
-
-
                     </div>
                 </div>
-
-
             </div>
         {% endfor %}
     </div>

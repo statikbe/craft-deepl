@@ -52,7 +52,7 @@ class MapperService extends Component
     }
 
 
-    private function isFieldSupported($field)
+    public function isFieldSupported($field)
     {
         $fieldType = explode('\\', get_class($field));
         $fieldProvider = $fieldType[1];
