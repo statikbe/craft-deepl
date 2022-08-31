@@ -2,11 +2,12 @@
 
 namespace statikbe\deepl\services\fields;
 
-use Craft;
 use craft\base\Component;
 use craft\base\Element;
 use craft\elements\Entry;
 use craft\elements\MatrixBlock;
+use craft\fields\Assets;
+use craft\fields\Categories;
 use craft\fields\Email;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
@@ -63,9 +64,35 @@ class Fields extends Component
      * @return mixed
      * @throws \craft\errors\InvalidFieldException
      */
-    public function Url(Url $field, Entry $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function Url(Url $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
         return $sourceEntry->getFieldValue($field->handle);
+    }
+
+    /**
+     * @param Categories $field
+     * @param Element $sourceEntry
+     * @param Site $sourceSite
+     * @param Site $targetSite
+     * @return mixed
+     * @throws \craft\errors\InvalidFieldException
+     */
+    public function Categories(Categories $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    {
+        return $sourceEntry->getFieldValue($field->handle)->ids();
+    }
+
+    /**
+     * @param Assets $field
+     * @param Element $sourceEntry
+     * @param Site $sourceSite
+     * @param Site $targetSite
+     * @return mixed
+     * @throws \craft\errors\InvalidFieldException
+     */
+    public function Assets(Assets $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    {
+        return $sourceEntry->getFieldValue($field->handle)->ids();
     }
 
     /**
@@ -99,6 +126,7 @@ class Fields extends Component
         }
 
         return $data;
+
         if ($field->propagationMethod === $field::PROPAGATION_METHOD_NONE) {
 
         }
