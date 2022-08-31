@@ -9,6 +9,7 @@ use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
 use statikbe\deepl\models\Settings;
 use statikbe\deepl\services\ApiService;
+use statikbe\deepl\services\fields\CKEditor;
 use statikbe\deepl\services\fields\Fields;
 use statikbe\deepl\services\fields\Redactor;
 use statikbe\deepl\services\MapperService;
@@ -19,6 +20,7 @@ use yii\base\Event;
  * @property ApiService api
  * @property MapperService mapper
  * @property Redactor redactor
+ * @property CKEditor ckeditor
  * @property Fields fields
  */
 class Deepl extends Plugin
@@ -54,6 +56,7 @@ class Deepl extends Plugin
             'api' => ApiService::class,
             'mapper' => MapperService::class,
             'redactor' => Redactor::class,
+            'ckeditor' => CKEditor::class,
             'fields' => Fields::class,
         ]);
 
