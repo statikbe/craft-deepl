@@ -7,6 +7,7 @@ use craft\base\Model;
 use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
+use statikbe\deepl\models\Settings;
 use statikbe\deepl\services\ApiService;
 use statikbe\deepl\services\fields\Fields;
 use statikbe\deepl\services\fields\Redactor;
@@ -57,5 +58,22 @@ class Deepl extends Plugin
         ]);
 
 
+    }
+
+    protected function createSettingsModel(): Model
+    {
+        return new Settings();
+    }
+
+    protected function settingsHtml(): string
+    {
+        $overrides = Craft::$app->getConfig()->getConfigFromFile(strtolower($this->handle));
+        return Craft::$app->view->renderTemplate(
+            'deepl/_settings/_index',
+            [
+                'settings' => $this->getSettings(),
+                'overrides' => $overrides,
+            ]
+        );
     }
 }
