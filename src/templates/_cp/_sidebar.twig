@@ -6,10 +6,10 @@
         {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
 
         {# Change this to only sites the current section is enabled for #}
-        {% set otherSites = craft.app.sites.getAllSites()|filter(v => v.handle != selectedSite.handle) %}
-
-
+        {% set otherSites = entry.section.siteSettings|filter(v => v.id != selectedSite.id) %}
+        
         {% for site in otherSites %}
+            {% set site = craft.app.sites.getSiteById(site.id) %}
             <div id="postDate-field" class="field">
                 <div class="heading">
                     <label id="postDate-label" for="postDate">{{ "Translation options" }}</label></div>
