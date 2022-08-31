@@ -3,7 +3,9 @@
 namespace statikbe\deepl\services;
 
 use craft\base\Component;
+use craft\helpers\App;
 use DeepL\Translator;
+use statikbe\deepl\Deepl;
 
 class ApiService extends Component
 {
@@ -11,7 +13,12 @@ class ApiService extends Component
 
     public function init(): void
     {
-        $authKey = getenv('DEEPL_KEY');
+
+        $authKey = App::parseEnv(Deepl::getInstance()->getSettings()->apiKey);
+        if(!$authKey) {
+            // Expand this to show a message and/or throw an exception if appropriate.
+            return;
+        }
         $this->translator = new Translator($authKey);
     }
 
