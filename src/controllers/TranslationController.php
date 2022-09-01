@@ -2,7 +2,10 @@
 
 namespace statikbe\deepl\controllers;
 
+use craft\base\Element;
+use craft\behaviors\DraftBehavior;
 use craft\elements\Entry;
+use craft\helpers\Cp;
 use craft\web\Controller;
 use Craft;
 use statikbe\deepl\Deepl;
@@ -33,11 +36,24 @@ class TranslationController extends Controller
 
         $targetEntry = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
         // Save the translated version of the entry as a new draft
-        Craft::$app->getDrafts()->saveElementAsDraft($targetEntry, Craft::$app->getUser()->getIdentity()->id);
 
+        // Save the translated version of the entry as a new draft
+        /** @var Element|DraftBehavior $element */
+        $draft = Craft::$app->getDrafts()->createDraft($targetEntry, Craft::$app->getUser()->getIdentity()->id,
+            'Translation',
+            'Creating DeepL translation'
+        );
+        $draft->setCanonical($targetEntry);
+        $element = $draft;
+        $element->setScenario(Element::SCENARIO_ESSENTIALS);
+        Craft::$app->getElements()->saveElement($element);
+        Craft::$app->getSession()->setFlash('Translation saved as draft');
         // Redirect to the translated entry
-        return $this->redirect($targetEntry->getCpEditUrl());
 
+        $response = $this->asSuccess("Translation saved as draft", [], $element->getCpEditUrl(), [
+            'details' => !$element->dateDeleted ? Cp::elementHtml($element) : null,
+        ]);
+        return $response;
 
     }
 }
