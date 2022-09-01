@@ -7,6 +7,9 @@ use craft\base\Model;
 use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
+use craft\log\MonologTarget;
+use Monolog\Formatter\LineFormatter;
+use Psr\Log\LogLevel;
 use statikbe\deepl\models\Settings;
 use statikbe\deepl\services\ApiService;
 use statikbe\deepl\services\fields\CKEditor;
@@ -51,6 +54,19 @@ class Deepl extends Plugin
                 $event->html .= $template;
             }
         );
+
+        // Register a custom log target, keeping the format as simple as possible.
+        Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
+            'name' => 'deepl',
+            'categories' => ['deepl'],
+            'level' => LogLevel::INFO,
+            'logContext' => false,
+            'allowLineBreaks' => false,
+            'formatter' => new LineFormatter(
+                format: "%datetime% %message%\n",
+                dateFormat: 'Y-m-d H:i:s',
+            ),
+        ]);
 
         $this->setComponents([
             'api' => ApiService::class,

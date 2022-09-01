@@ -5,9 +5,11 @@ namespace statikbe\deepl\services;
 use craft\base\Component;
 use craft\elements\Entry;
 use craft\errors\FieldNotFoundException;
+use craft\errors\InvalidFieldException;
 use DeepL\Translator;
 use statikbe\deepl\Deepl;
 use Craft;
+use yii\log\Logger;
 
 class MapperService extends Component
 {
@@ -55,19 +57,24 @@ class MapperService extends Component
     public function isFieldSupported($field)
     {
         $fieldType = explode('\\', get_class($field));
+        $class = get_class($field);
         $fieldProvider = $fieldType[1];
         $fieldType = end($fieldType);
+        try {
 
-        if (class_exists('statikbe\\deepl\\services\\fields\\' . $fieldProvider)) {
-            if (in_array($fieldType, get_class_methods(Deepl::getInstance()->$fieldProvider))) {
-                return [$fieldProvider, $fieldType];
+            if (class_exists('statikbe\\deepl\\services\\fields\\' . $fieldProvider)) {
+                if (in_array($fieldType, get_class_methods(Deepl::getInstance()->$fieldProvider))) {
+                    return [$fieldProvider, $fieldType];
+                } else {
+                    throw new InvalidFieldException(get_class($field), "Field not supported: {$class}");
+                }
             } else {
-                throw new FieldNotFoundException("Field not suppurted");
-//                Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
+                throw new InvalidFieldException(get_class($field), "Field not supported: {$class}");
             }
-        } else {
-            throw new FieldNotFoundException("Field not suppurted");
-//            Craft::warning("Fieldtype not supported: $fieldType", __CLASS__);
+        } catch (InvalidFieldException $e) {
+            Craft::getLogger()->log($e->getMessage(), Logger::LEVEL_INFO, 'deepl');
+
         }
+        return false;
     }
 }
