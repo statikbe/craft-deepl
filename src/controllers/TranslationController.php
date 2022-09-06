@@ -36,19 +36,19 @@ class TranslationController extends Controller
 
         $targetEntry = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 
+        Craft::$app->getDrafts()->saveElementAsDraft($targetEntry);
         // Save the translated version of the entry as a new draft
-        /** @var Element|DraftBehavior $element */
-        $draft = Craft::$app->getDrafts()->createDraft($targetEntry, Craft::$app->getUser()->getIdentity()->id,
-            'Translation',
-            'Creating DeepL translation'
-        );
+//        /** @var Element|DraftBehavior $element */
+//        $draft = Craft::$app->getDrafts()->createDraft($targetEntry, Craft::$app->getUser()->getIdentity()->id,
+//            'Translation',
+//            'Creating DeepL translation'
+//        );
+//
+//        $draft->setScenario(Element::SCENARIO_ESSENTIALS);
+//        Craft::$app->getElements()->saveElement($draft);
 
-        $draft->setScenario(Element::SCENARIO_ESSENTIALS);
-        Craft::$app->getElements()->saveElement($draft);
-        Craft::$app->getSession()->setFlash('Translation saved as draft');
-
-        $response = $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
-            'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
+        $response = $this->asSuccess("Translation saved as draft", [], $targetEntry->getCpEditUrl(), [
+            'details' => !$targetEntry->dateDeleted ? Cp::elementHtml($targetEntry) : null,
         ]);
         return $response;
 

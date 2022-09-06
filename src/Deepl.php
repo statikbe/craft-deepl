@@ -13,8 +13,10 @@ use Psr\Log\LogLevel;
 use statikbe\deepl\models\Settings;
 use statikbe\deepl\services\ApiService;
 use statikbe\deepl\services\fields\CKEditor;
+use statikbe\deepl\services\fields\Configvaluesfield;
 use statikbe\deepl\services\fields\Fields;
 use statikbe\deepl\services\fields\Redactor;
+use statikbe\deepl\services\fields\Supertable;
 use statikbe\deepl\services\MapperService;
 use yii\base\Event;
 
@@ -25,6 +27,8 @@ use yii\base\Event;
  * @property Redactor redactor
  * @property CKEditor ckeditor
  * @property Fields fields
+ * @property Supertable supertable
+ * @property Configvaluesfield configvaluesfield
  */
 class Deepl extends Plugin
 {
@@ -74,6 +78,8 @@ class Deepl extends Plugin
             'redactor' => Redactor::class,
             'ckeditor' => CKEditor::class,
             'fields' => Fields::class,
+            'supertable' => Supertable::class,
+            'configvaluesfield' => Configvaluesfield::class,
         ]);
 
 
