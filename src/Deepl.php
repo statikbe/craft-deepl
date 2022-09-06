@@ -16,6 +16,7 @@ use statikbe\deepl\services\fields\CKEditor;
 use statikbe\deepl\services\fields\Configvaluesfield;
 use statikbe\deepl\services\fields\CTA;
 use statikbe\deepl\services\fields\Fields;
+use statikbe\deepl\services\fields\Positionfieldtype;
 use statikbe\deepl\services\fields\Redactor;
 use statikbe\deepl\services\fields\Supertable;
 use statikbe\deepl\services\MapperService;
@@ -31,6 +32,7 @@ use yii\base\Event;
  * @property Supertable supertable
  * @property Configvaluesfield configvaluesfield
  * @property CTA cta
+ * @property Positionfieldtype positionfieldtype
  */
 class Deepl extends Plugin
 {
@@ -83,6 +85,7 @@ class Deepl extends Plugin
             'supertable' => Supertable::class,
             'configvaluesfield' => Configvaluesfield::class,
             'cta' => CTA::class,
+            'positionfieldtype' => Positionfieldtype::class,
         ]);
 
 
