@@ -1,0 +1,36 @@
+<?php
+
+namespace statikbe\deepl\services\fields;
+
+use craft\base\Component;
+use craft\base\Element;
+use craft\models\Site;
+use statikbe\cta\fields\CTAField;
+use statikbe\deepl\Deepl;
+use verbb\supertable\elements\SuperTableBlockElement;
+use verbb\supertable\fields\SuperTableField;
+
+
+class CTA extends Component
+{
+
+    public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    {
+
+        /** @var \statikbe\cta\models\CTA $model */
+
+        $model = $sourceEntry->getFieldValue($field->handle);
+        $data = $model->toArray();
+        if($data['customText']) {
+            $translation = Deepl::getInstance()->api->translateString(
+                $data['customText'],
+                $sourceSite->language,
+                $targetSite->language
+            );
+            $data['customText'] = $translation;
+        }
+        return $data;
+    }
+
+
+}
