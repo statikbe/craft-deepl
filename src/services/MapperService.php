@@ -31,7 +31,7 @@ class MapperService extends Component
         }
 
         $layout = Craft::$app->getFields()->getLayoutById($fieldLayoutId);
-
+        $values = [];
         foreach ($layout->getCustomFields() as $field) {
             try {
                 $fieldData = $this->isFieldSupported($field);
@@ -44,13 +44,13 @@ class MapperService extends Component
                         $sourceSite,
                         $targetSite
                     );
-                    $targetEntry->setFieldValue($field['handle'], $translation);
+                    $values[$field['handle']] = $translation;
                 }
             } catch (FieldNotFoundException $e) {
                 Craft::error("Fieldtype not supported: " . get_class($field), __CLASS__);
             }
         }
-        return $targetEntry;
+        return $values;
     }
 
 
