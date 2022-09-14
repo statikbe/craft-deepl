@@ -8,6 +8,7 @@ use craft\elements\Entry;
 use craft\elements\MatrixBlock;
 use craft\fields\Assets;
 use craft\fields\Categories;
+use craft\fields\Dropdown;
 use craft\fields\Email;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
@@ -93,6 +94,11 @@ class Fields extends Component
     public function Assets(Assets $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
         return $sourceEntry->getFieldValue($field->handle)->ids();
+    }
+
+    public function Dropdown(Dropdown $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    {
+        return $sourceEntry->getFieldValue($field->handle)->value;
     }
 
     /**
