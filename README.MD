@@ -1,15 +1,30 @@
 # DeepL integration for Craft CMS 4 
 
-The goal of this plugin is to let DeepL handle 95% of the translation work, after which you can review the text and change it to your own tone of voice and specific industry jargon.
+The goal of this plugin is to let [DeepL](https://www.deepl.com/) handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
 
-__It is not meant to be a click and forget translation tool.__
+__It is not meant to be a single click all encompassing translation tool.__
 
 The plugin will translate supported text fields and will copy other field types without interfering with them. For example:
-a plain text and a Redactor field will get translated, a Categories and a dropdown field will keep your same value.
+a plain text field and a Redactor field will get translated, a Categories and a dropdown field will keep the same value.
+
+## Workflow
+
+When the plugin is enabled, you'll see a new block in the sidebar of the entry edit page.
+Depending on how many langauges your CMS install has, you'll so more translation options.
+
+The plugin does not support translating only specific fields or texts, **only all fields at once**. So we recommend the following workflow:
+- Finish the entry 1 language
+- Switch to the language to which you want to translate
+- Click the option for the language from which you want to translate (the one you finished in the first step)
+
+When you click the translate button, **a new draft will be created** for that entry, so you'll have overwrite excisting content or publish your translation right away.
+
+It's up to you to check the translations and the rest of the fields and to apply the draft when you're are satisfied with the result.
+
+> **Warning**
+> The plugin does not keep track of which fields or entries have been translated previously. If you click the translation button again, after you've made changes in the destination language, those will be discarded in the newly created draft.
 
 ---
-
-
 
 ## Requirements
 
