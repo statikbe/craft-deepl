@@ -11,8 +11,8 @@
         "translate"
     ],
     "support": {
-        "docs": "https://github.com/statikbe/deepl/blob/master/README.md",
-        "issues": "https://github.com/statikbe/deepl/issues"
+        "docs": "https://github.com/statikbe/craft-deepl/blob/main/README.md",
+        "issues": "https://github.com/statikbe/craft-deepl/issues"
     },
     "license": "MIT",
     "authors": [
@@ -31,7 +31,7 @@
         }
     },
     "extra": {
-        "name": "Deepl",
+        "name": "DeepL",
         "handle": "deepl",
         "schemaVersion": "1.0.0",
         "hasSettings": true,
