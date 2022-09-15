@@ -44,6 +44,7 @@ class MapperService extends Component
                         $sourceSite,
                         $targetSite
                     );
+                    $values[$field['handle']] = $translation;
                 }
             } catch (InvalidFieldException $e) {
                 // TODO: if string pass the value, of object log not supported

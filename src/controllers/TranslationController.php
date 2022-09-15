@@ -53,10 +53,10 @@ class TranslationController extends Controller
             $draft->setScenario(Element::SCENARIO_ESSENTIALS);
             $draft->setFieldValues($newValues);
 
+
         } catch (Exception $e) {
             $this->returnError($sourceEntry);
         }
-
 
         if (!$draft->validate()) {
             $this->returnError($sourceEntry);

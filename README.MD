@@ -1,6 +1,13 @@
 # DeepL integration for Craft CMS 4 
 
+The goal of this plugin is to let DeepL handle 95% of the translation work, after which you can review the text and change it to your own tone of voice and specific industry jargon.
 
+__It is not meant to be a click and forget translation tool.__
+
+The plugin will translate supported text fields and will copy other field types without interfering with them. For example:
+a plain text and a Redactor field will get translated, a Categories and a dropdown field will keep your same value.
+
+---
 
 
 
@@ -25,6 +32,23 @@ composer require statikbe/craft-deepl
 # tell Craft to install the plugin
 php craft install/plugin deepl
 ```
+
+## Supported Fields
+The plugin currently supports (for either translation or for copying values)
+
+#### Core Craft fields:
+- Plain Text
+- Matrix
+- Assets
+
+#### Third party fields
+- craftcms/redactor
+- craftcms/ckeditor
+- verbb/supertable 
+- hybridinteractive/craft-position-fieldtype
+- statikbe/craft-config-values 
+- statikbe/craft-cta-field
+
 
 ## Roadmap
 

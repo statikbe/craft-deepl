@@ -42,38 +42,6 @@ class Fields extends Component
         );
     }
 
-
-    /**
-     * @param Email $field
-     * @param Entry $sourceEntry
-     * @param Site $sourceSite
-     * @param Site $targetSite
-     * @return mixed
-     * @throws \craft\errors\InvalidFieldException
-     */
-    public function Email(Email $field, Entry $sourceEntry, Site $sourceSite, Site $targetSite)
-    {
-        return $sourceEntry->getFieldValue($field->handle);
-    }
-
-    /**
-     * @param Assets $field
-     * @param Element $sourceEntry
-     * @param Site $sourceSite
-     * @param Site $targetSite
-     * @return mixed
-     * @throws \craft\errors\InvalidFieldException
-     */
-    public function Assets(Assets $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
-    {
-        return $sourceEntry->getFieldValue($field->handle)->ids();
-    }
-
-    public function Dropdown(Dropdown $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
-    {
-        return $sourceEntry->getFieldValue($field->handle)->value;
-    }
-
     /**
      * @param Matrix $field
      */

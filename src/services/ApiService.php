@@ -49,6 +49,7 @@ class ApiService extends Component
         $str = explode('-', $string);
         $lang = $str[0];
 
+        // TODO: Better handling for support languages
         if ($lang === 'en') {
             if ($isTarget) {
                 return 'en-GB';
