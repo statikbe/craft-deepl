@@ -9,52 +9,71 @@ use craft\helpers\Cp;
 use craft\web\Controller;
 use Craft;
 use statikbe\deepl\Deepl;
+use yii\base\Exception;
 
 class TranslationController extends Controller
 {
     public function actionIndex()
     {
-        $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
-        $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
-        $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
+        // TODO: run check to see if we have an API key
+        try {
+            $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
+            $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
+            $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
 
-        $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
-        $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
-
-
-        $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
-        $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
-
-        //Handle different section propagation methods ?
-
-        $newTitle = Deepl::getInstance()->api->translateString(
-            $sourceEntry->title,
-            $sourceSite->language,
-            $destinationSite->language
-        );
-        $targetEntry->title = $newTitle;
-
-        $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
+            $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
+            $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
 
 
-        // Save the translated version of the entry as a new draft
-        /** @var Element|DraftBehavior $element */
-        $draft = Craft::$app->getDrafts()->createDraft(
-            $targetEntry,
-            Craft::$app->getUser()->getIdentity()->id,
-            'Translation',
-            'Creating DeepL translation',
-        );
+            $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
+            $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
 
-        $draft->setCanonical($targetEntry);
-        $draft->setScenario(Element::SCENARIO_ESSENTIALS);
-        $draft->setFieldValues($newValues);
+            //Handle different section propagation methods ?
+
+            $newTitle = Deepl::getInstance()->api->translateString(
+                $sourceEntry->title,
+                $sourceSite->language,
+                $destinationSite->language
+            );
+            $targetEntry->title = $newTitle;
+
+            $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
+
+
+            // Save the translated version of the entry as a new draft
+            /** @var Element|DraftBehavior $element */
+            $draft = Craft::$app->getDrafts()->createDraft(
+                $targetEntry,
+                Craft::$app->getUser()->getIdentity()->id,
+                'Translation',
+                'Creating DeepL translation',
+            );
+
+            $draft->setCanonical($targetEntry);
+            $draft->setScenario(Element::SCENARIO_ESSENTIALS);
+            $draft->setFieldValues($newValues);
+
+        } catch (Exception $e) {
+            $this->returnError($sourceEntry);
+        }
+
+
+        if (!$draft->validate()) {
+            $this->returnError($sourceEntry);
+        }
+
         Craft::$app->getElements()->saveElement($draft);
 
-        $response = $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
+        return $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
             'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
         ]);
-        return $response;
 
+    }
+
+    private function returnError(Entry $entry)
+    {
+        return $this->asFailure("Couldn't create translation", [], $entry->getCpEditUrl(), [
+            'details' => !$entry->dateDeleted ? Cp::elementHtml($entry) : null,
+        ]);
     }
 }
