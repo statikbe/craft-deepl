@@ -58,7 +58,8 @@ class Deepl extends Plugin
                 if ($event->sender->getIsDraft()) {
                     return;
                 }
-                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_sidebar', ["entry" => $event->sender]);
+                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_sidebar',
+                    ["entry" => $event->sender, "settings" => $this->getSettings()]);
                 $event->html .= $template;
             }
         );

@@ -3,26 +3,32 @@
     <div class="meta">
         {% set siteParam = craft.app.request.getParam('site') %}
         {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
-        {% set otherSites = entry.section.siteSettings|filter(v => v.id != selectedSite.id) %}
-
-        {% for site in otherSites %}
-            {% set site = craft.app.sites.getSiteById(site.id) %}
+        {% set otherSites = entry.section.siteSettings|filter(v => v.siteId != selectedSite.id) %}
+        {% if selectedSite.primary and not settings.primarySiteTranslation %}
             <div class="field">
-                <div class="heading">
-                    <label>{{ "Translation options" }}</label></div>
                 <div class="input ltr">
-                    <div class="wrapper">
-                        <div class="btngroup flex">
-                            <div>
-                                <a href="{{ actionUrl('deepl/translation/index', {'entry': entry.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
-                                   class="btn ">
-                                    {{ "From {otherLocale} to {currentLocale}"|t('app', { otherLocale: site.locale, currentLocale: selectedSite.locale }) }}
-                                </a>
-                            </div>
+                    {{ "Entries in the primary site are not allowed to be translated. Contact support for further questions." }}
+                </div>
+            </div>
+
+        {% else %}
+            <div class="field">
+                {{ "Translate this page in {locale} <br>based on:"|t({locale: craft.app.locale.getDisplayName(selectedSite.locale)})|raw }}
+            </div>
+            {% for site in otherSites %}
+                {% set site = craft.app.sites.getSiteById(site.siteId) %}
+                <div class="field">
+                    <div class="btngroup flex">
+                        <div>
+                            <a href="{{ actionUrl('deepl/translation/index', {'entry': entry.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
+                               class="btn ">
+                                {{ "From {otherLocale}"|t('app', { otherLocale: site.locale.getDisplayName(selectedSite.locale) }) }}
+                            </a>
+
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
 </fieldset>
