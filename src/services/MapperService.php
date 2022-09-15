@@ -44,9 +44,10 @@ class MapperService extends Component
                         $sourceSite,
                         $targetSite
                     );
-                    $values[$field['handle']] = $translation;
                 }
-            } catch (FieldNotFoundException $e) {
+            } catch (InvalidFieldException $e) {
+                // TODO: if string pass the value, of object log not supported
+                $values[$field['handle']] = $sourceEntry->getFieldValue($field->handle);
                 Craft::error("Fieldtype not supported: " . get_class($field), __CLASS__);
             }
         }
@@ -61,7 +62,6 @@ class MapperService extends Component
         $fieldProvider = $fieldType[1];
         $fieldType = end($fieldType);
         try {
-
             if (class_exists('statikbe\\deepl\\services\\fields\\' . $fieldProvider)) {
                 if (in_array($fieldType, get_class_methods(Deepl::getInstance()->$fieldProvider))) {
                     return [$fieldProvider, $fieldType];
@@ -73,6 +73,7 @@ class MapperService extends Component
             }
         } catch (InvalidFieldException $e) {
             Craft::getLogger()->log($e->getMessage(), Logger::LEVEL_INFO, 'deepl');
+            throw $e;
 
         }
         return false;

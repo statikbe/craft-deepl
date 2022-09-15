@@ -56,33 +56,6 @@ class Fields extends Component
         return $sourceEntry->getFieldValue($field->handle);
     }
 
-
-    /**
-     * @param Url $field
-     * @param Entry $sourceEntry
-     * @param Site $sourceSite
-     * @param Site $targetSite
-     * @return mixed
-     * @throws \craft\errors\InvalidFieldException
-     */
-    public function Url(Url $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
-    {
-        return $sourceEntry->getFieldValue($field->handle);
-    }
-
-    /**
-     * @param Categories $field
-     * @param Element $sourceEntry
-     * @param Site $sourceSite
-     * @param Site $targetSite
-     * @return mixed
-     * @throws \craft\errors\InvalidFieldException
-     */
-    public function Categories(Categories $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
-    {
-        return $sourceEntry->getFieldValue($field->handle)->ids();
-    }
-
     /**
      * @param Assets $field
      * @param Element $sourceEntry
