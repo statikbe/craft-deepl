@@ -19,12 +19,13 @@ The plugin doesn't  support translating specific fields or texts, **only all fie
 - Switch to the language to which you want to translate
 - Click the option for the language from which you want to translate (the one you finished in the first step)
 
-When you click the translate button, **a new draft will be created** for that entry, so you'll have overwrite existing content or publish your translation right away.
+When you click the ‘translate to’ button in your source entry (e.g. English version is source content), a draft version of the ‘translate to language’ (e.g. Dutch) will be created for that entry. 
+In this draft version (Dutch), all text fields of the source language entry will be translated into your chosen language (Dutch) via Deepl. Content that already existed in the new language (Dutch in this example) for the entry, will be overwritten when using the "translate via Deepl" button.
 
-It's up to you to check the translations and the rest of the fields and to apply the draft when you're satisfied with the result.
+Once the draft version with Deepl translations is created, it’s up to the content manager to check and refine the translations, as well as the non-text-fields, and to publish the draft when satisfied with the result.
 
 > **Warning**
-> The plugin does not keep track of which fields or entries have been translated previously. If you click the translation button again, after you've made changes in the destination language, those will be discarded in the newly created draft.
+> Warning: The plugin does not keep track of which fields or entries have been translated in earlier stages. If you have made changes in the new language (Dutch in our example), and then click the translation button again (from the English source content to the Dutch translated language), all changes previously made in the destination language entry will be discarded in the newly created draft.
 
 ---
 
@@ -32,6 +33,10 @@ It's up to you to check the translations and the rest of the fields and to apply
 
 - Craft CMS 4.0.0 or later.
 - a [DeepL API key](https://www.deepl.com/pro-api?cta=header-pro-api/)
+
+> **Info**
+> Using the plugin is only possible with a Deepl API key, which will require your payment details. The current pricing model of Deepl allows a certain number of monthly translations at no cost. 
+> The plugin maintainers are not responsible for any possible change in pricing model Deepl would make.
 
 ## Installation
 
