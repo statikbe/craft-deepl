@@ -3,6 +3,8 @@
 namespace statikbe\deepl\services;
 
 use craft\base\Component;
+use craft\base\Element;
+use craft\elements\db\ElementQuery;
 use craft\elements\Entry;
 use craft\errors\FieldNotFoundException;
 use craft\errors\InvalidFieldException;
@@ -48,11 +50,19 @@ class MapperService extends Component
                 }
             } catch (InvalidFieldException $e) {
                 // TODO: if string pass the value, of object log not supported
-                $values[$field['handle']] = $sourceEntry->getFieldValue($field->handle);
+                $values[$field['handle']] = $this->handleUnsupportedField($sourceEntry, $field->handle);
                 Craft::error("Fieldtype not supported: " . get_class($field), __CLASS__);
             }
         }
         return $values;
+    }
+
+    public function handleUnsupportedField(Element $element, string $handle)
+    {
+        if ($element->getFieldValue($handle) instanceof ElementQuery) {
+            return $element->getFieldValue($handle)->anyStatus()->ids();
+        }
+        return $element->getFieldValue($handle);
     }
 
 

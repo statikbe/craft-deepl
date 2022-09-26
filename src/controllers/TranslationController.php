@@ -39,7 +39,6 @@ class TranslationController extends Controller
 
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 
-
             // Save the translated version of the entry as a new draft
             /** @var Element|DraftBehavior $element */
             $draft = Craft::$app->getDrafts()->createDraft(
@@ -48,7 +47,6 @@ class TranslationController extends Controller
                 'Translation',
                 'Creating DeepL translation',
             );
-
             $draft->setCanonical($targetEntry);
             $draft->setScenario(Element::SCENARIO_ESSENTIALS);
             $draft->setFieldValues($newValues);
