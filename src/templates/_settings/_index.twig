@@ -1,28 +1,18 @@
 {# @var craft \craft\web\twig\variables\CraftVariable #}
 {% import "_includes/forms" as forms %}
 
-{% macro configWarning(setting) -%}
-    {% set setting = '<code>'~setting~'</code>' %}
-    {{ "This is being overridden by the {setting} config setting in your {file} config file."|t('deepl', {
-        setting: setting,
-        file: 'deepl.php'
-    })|raw }}
-{%- endmacro %}
-{% from _self import configWarning %}
 
 {{ forms.autosuggestfield({
-    label: 'DeepL API key',
+    label: 'DeepL API key'|t('deepl'),
     name: 'apiKey',
-    instructions: 'The Algolia Application ID can be found in your [Algolia Account](https://www.algolia.com/api-keys)',
+    instructions: 'Your API key can be found in your [DeepL Account](https://www.deepl.com/account/summary)'|t('deepl'),
     suggestEnvVars: true,
     value: settings.apiKey,
-    disabled: 'apiKey' in overrides,
-    warning: 'apiKey' in overrides ? configWarning('apiKey'),
 }) }}
 
-     {{ forms.lightswitchField({
-         label:        "Allow entries in the primary site to be translated"|t,
-         id:           'primarySiteTranslation',
-         name:         'primarySiteTranslation',
-         on:           settings.primarySiteTranslation,
-     }) }}
+ {{ forms.lightswitchField({
+     label:        "Allow entries in the primary site to be translated"|t('deepl'),
+     id:           'primarySiteTranslation',
+     name:         'primarySiteTranslation',
+     on:           settings.primarySiteTranslation,
+ }) }}
