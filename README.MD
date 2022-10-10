@@ -1,6 +1,6 @@
 # DeepL integration for Craft CMS 4 
 
-The goal of this plugin is to let [DeepL](https://www.deepl.com/){:target="_blank" rel="noopener"} handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
+The goal of this plugin is to let <a href="https://www.deepl.com/" target="_blank" rel="noopener">DeepL</a> handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
 
 __It is not meant to be a single click all encompassing translation tool.__
 
@@ -32,7 +32,7 @@ Once the draft version with Deepl translations is created, it’s up to the cont
 ## Requirements
 
 - Craft CMS 4.0.0 or later.
-- a [DeepL API key](https://www.deepl.com/pro-api?cta=header-pro-api/)
+- a <a href="https://www.deepl.com/pro-api?cta=header-pro-api/" target="_blank" rel="noopener">DeepL API key</a>
 
 > **Note**
 > Using the plugin is only possible with a Deepl API key, which will require your payment details. The current pricing model of Deepl allows a certain number of monthly translations at no cost. 
