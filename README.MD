@@ -1,6 +1,6 @@
 # DeepL integration for Craft CMS 4 
 
-The goal of this plugin is to let [DeepL](https://www.deepl.com/) handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
+The goal of this plugin is to let [DeepL](https://www.deepl.com/){:target="_blank" rel="noopener"} handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
 
 __It is not meant to be a single click all encompassing translation tool.__
 
