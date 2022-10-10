@@ -4,17 +4,17 @@
     <div class="meta">
         {% set siteParam = craft.app.request.getParam('site') %}
         {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
+
         {% set otherSites = entry.section.siteSettings|filter(v => v.siteId != selectedSite.id) %}
         {% if selectedSite.primary and not settings.primarySiteTranslation %}
             <div class="field">
                 <div class="input ltr">
-                    {{ "Entries in the primary site are not allowed to be translated. Contact support for further questions." }}
+                    {{ "Entries in the primary site are not allowed to be translated. Contact support for further questions."|t('deepl') }}
                 </div>
             </div>
-
         {% else %}
             <div class="field">
-                {{ "Translate this page in {locale} <br>based on:"|t({locale: craft.app.locale.getDisplayName(selectedSite.locale)})|raw }}
+                {{ "Translate this page with content from:"|t("deepl") }}
             </div>
             {% for site in otherSites %}
                 {% set site = craft.app.sites.getSiteById(site.siteId) %}
@@ -23,9 +23,7 @@
                         <div>
                             <a href="{{ actionUrl('deepl/translation/index', {'entry': entry.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
                                class="btn ">
-                                {{ "From {otherLocale}"|t('app', { otherLocale: site.locale.getDisplayName(selectedSite.locale) }) }}
-                            </a>
-
+                                {{ "From {locale}"|t('deepl', { locale: site.locale.getDisplayName(currentUser.preferences.language) }) }}                            </a>
                         </div>
                     </div>
                 </div>
