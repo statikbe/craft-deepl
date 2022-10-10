@@ -7,7 +7,9 @@ use craft\base\Model;
 use craft\base\Plugin;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\log\MonologTarget;
+use craft\services\UserPermissions;
 use Monolog\Formatter\LineFormatter;
 use Psr\Log\LogLevel;
 use statikbe\deepl\models\Settings;
@@ -77,6 +79,8 @@ class Deepl extends Plugin
             ),
         ]);
 
+        $this->registerPermissions();
+
         $this->setComponents([
             'api' => ApiService::class,
             'mapper' => MapperService::class,
@@ -106,6 +110,27 @@ class Deepl extends Plugin
                 'settings' => $this->getSettings(),
                 'overrides' => $overrides,
             ]
+        );
+    }
+
+    private function registerPermissions()
+    {
+        Event::on(
+            UserPermissions::class,
+            UserPermissions::EVENT_REGISTER_PERMISSIONS,
+            function (RegisterUserPermissionsEvent $event) {
+
+                // Register our custom permissions
+                $permissions = [
+                    "heading" => Craft::t('deepl', 'DeepL Translator'),
+                    "permissions" => [
+                        'deepl:translate-entries' => [
+                            'label' => Craft::t('deepl', 'Translate entries'),
+                        ],
+                    ]
+                ];
+                $event->permissions[Craft::t('deepl', 'DeepL')] = $permissions;
+            }
         );
     }
 }

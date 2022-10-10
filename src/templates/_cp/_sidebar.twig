@@ -1,3 +1,4 @@
+{% if currentUser.can('deepl:translate-entries') %}
 <fieldset>
     <legend class="h6">{{ "Deepl" }}</legend>
     <div class="meta">
@@ -32,3 +33,4 @@
         {% endif %}
     </div>
 </fieldset>
+{% endif %}
