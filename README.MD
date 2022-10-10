@@ -34,7 +34,7 @@ Once the draft version with Deepl translations is created, it’s up to the cont
 - Craft CMS 4.0.0 or later.
 - a [DeepL API key](https://www.deepl.com/pro-api?cta=header-pro-api/)
 
-> **Info**
+> **Note**
 > Using the plugin is only possible with a Deepl API key, which will require your payment details. The current pricing model of Deepl allows a certain number of monthly translations at no cost. 
 > The plugin maintainers are not responsible for any possible change in pricing model Deepl would make.
 
