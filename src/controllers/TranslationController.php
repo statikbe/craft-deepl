@@ -70,7 +70,7 @@ class TranslationController extends Controller
 
     private function returnError(Entry $entry)
     {
-        return $this->asFailure("Couldn't create translation", [], $entry->getCpEditUrl(), [
+        return $this->asFailure("Couldn't create translation", [], [
             'details' => !$entry->dateDeleted ? Cp::elementHtml($entry) : null,
         ]);
     }

@@ -15,8 +15,9 @@ class Redactor extends Component
     public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
+
         if (!$content) {
-            return false;
+            return "";
         }
 
         return Deepl::getInstance()->api->translateString(

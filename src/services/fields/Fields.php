@@ -33,7 +33,7 @@ class Fields extends Component
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         if (!$content) {
-            return false;
+            return "";
         }
 
         return Deepl::getInstance()->api->translateString(
@@ -45,8 +45,11 @@ class Fields extends Component
 
     /**
      * @param Matrix $field
+     * @param Element $sourceEntry
+     * @param Site $sourceSite
+     * @param Site $targetSite
      */
-    public function Matrix(Matrix $field, Entry $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function Matrix(Matrix $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
         // Handle different types of propagation methods here
         $blocks = $sourceEntry->getFieldValue($field->handle)->all();
