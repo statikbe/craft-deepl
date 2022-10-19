@@ -40,6 +40,6 @@
         "schemaVersion": "1.0.0",
         "hasSettings": true,
         "developer": "Statik",
-        "class": "statikbe\\deepl\\deepl"
+        "class": "statikbe\\deepl\\Deepl"
     }
 }

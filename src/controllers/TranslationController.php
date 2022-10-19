@@ -28,7 +28,7 @@ class TranslationController extends Controller
             $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
             $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
 
-            //Handle different section propagation methods ?
+            //TODO Handle different section propagation methods ?
 
             $newTitle = Deepl::getInstance()->api->translateString(
                 $sourceEntry->title,
