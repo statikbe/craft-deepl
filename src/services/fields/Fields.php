@@ -4,6 +4,7 @@ namespace statikbe\deepl\services\fields;
 
 use craft\base\Component;
 use craft\base\Element;
+use craft\base\Field as BaseField;
 use craft\elements\Entry;
 use craft\elements\MatrixBlock;
 use craft\errors\InvalidFieldException;
@@ -32,6 +33,10 @@ class Fields extends Component
     public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
         $content = $sourceEntry->getFieldValue($field->handle);
+        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
+            return $content;
+        }
+
         if (!$content) {
             return "";
         }
