@@ -7,8 +7,6 @@ use craft\base\Element;
 use craft\models\Site;
 use statikbe\cta\fields\CTAField;
 use statikbe\deepl\Deepl;
-use verbb\supertable\elements\SuperTableBlockElement;
-use verbb\supertable\fields\SuperTableField;
 
 
 class CTA extends Component

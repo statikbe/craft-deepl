@@ -4,8 +4,7 @@ namespace statikbe\deepl\services\fields;
 
 use craft\base\Component;
 use craft\base\Element;
-use craft\base\Field;
-use craft\errors\InvalidFieldException;
+use craft\base\Field as BaseField;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 
@@ -24,6 +23,11 @@ class Statik extends Component
     public function AnchorLink(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
+
+        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
+            return $content;
+        }
+
         if (!$content) {
             return "";
         }

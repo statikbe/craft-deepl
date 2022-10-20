@@ -7,7 +7,6 @@ use craft\base\Component;
 use craft\base\Element;
 use craft\models\Site;
 use rias\positionfieldtype\fields\Position;
-use statikbe\deepl\Deepl;
 
 class Positionfieldtype extends Component
 {

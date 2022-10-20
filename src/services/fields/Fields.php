@@ -8,13 +8,8 @@ use craft\base\Field as BaseField;
 use craft\elements\Entry;
 use craft\elements\MatrixBlock;
 use craft\errors\InvalidFieldException;
-use craft\fields\Assets;
-use craft\fields\Categories;
-use craft\fields\Dropdown;
-use craft\fields\Email;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
-use craft\fields\Url;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 

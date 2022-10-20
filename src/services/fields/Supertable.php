@@ -4,8 +4,6 @@ namespace statikbe\deepl\services\fields;
 
 use craft\base\Component;
 use craft\base\Element;
-use craft\elements\Entry;
-use craft\elements\MatrixBlock;
 use craft\errors\InvalidFieldException;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
