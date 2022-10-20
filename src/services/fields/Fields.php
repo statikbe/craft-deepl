@@ -70,18 +70,17 @@ class Fields extends Component
                             $sourceSite,
                             $targetSite
                         );
-                        $data[$key]['fields'][$blockField->handle] = $translation;
+                        $data[$block->id]['fields'][$blockField->handle] = $translation;
                     }
                 }catch (InvalidFieldException $e) {
-                    // TODO: if string pass the value, of object log not supported$
-                    $data[$key]['fields'][$blockField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $blockField->handle);
+                    $data[$block->id]['fields'][$blockField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $blockField->handle);
                     \Craft::error("Matrix - Fieldtype not supported: " . get_class($field), __CLASS__);
                 }
             }
 
-            if(isset($data[$key])  && $data[$key] > 0) {
-                $data[$key]['type'] = $blockType->handle;
-                $data[$key]['enabled'] = true;
+            if(isset($data[$block->id])  && $data[$block->id] > 0) {
+                $data[$block->id]['type'] = $blockType->handle;
+                $data[$block->id]['enabled'] = true;
             }
         }
         return $data;
