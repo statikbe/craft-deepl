@@ -84,10 +84,6 @@ class Fields extends Component
             }
         }
         return $data;
-
-        if ($field->propagationMethod === $field::PROPAGATION_METHOD_NONE) {
-
-        }
     }
 
 
