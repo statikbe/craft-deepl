@@ -23,8 +23,8 @@ class Supertable extends Component
         /** @var SuperTableBlockElement $block */
         foreach ($blocks as $key => $block) {
             $blockType = $block->type;
-            $data[$key]['type'] = $blockType->id;
-            $data[$key]['enabled'] = true;
+            $data[$block->id]['type'] = $blockType->id;
+            $data[$block->id]['enabled'] = true;
             $blockFields = $block->getFieldLayout()->getCustomFields();
             foreach ($blockFields as $blockField) {
                 try {
@@ -38,11 +38,11 @@ class Supertable extends Component
                             $sourceSite,
                             $targetSite
                         );
-                        $data[$key]['fields'][$blockField->handle] = $translation;
+                        $data[$block->id]['fields'][$blockField->handle] = $translation;
                     }
                 }catch (InvalidFieldException $e) {
                     // TODO: if string pass the value, of object log not supported$
-                    $data[$key]['fields'][$blockField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $blockField->handle);
+                    $data[$block->id]['fields'][$blockField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $blockField->handle);
                     \Craft::error("SuperTable - Fieldtype not supported: " . get_class($field), __CLASS__);
                 }
             }
@@ -50,9 +50,6 @@ class Supertable extends Component
 
         return $data;
 
-        if ($field->propagationMethod === $field::PROPAGATION_METHOD_NONE) {
-
-        }
     }
 
 
