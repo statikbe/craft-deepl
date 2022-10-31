@@ -22,6 +22,7 @@ use statikbe\deepl\services\fields\Positionfieldtype;
 use statikbe\deepl\services\fields\Redactor;
 use statikbe\deepl\services\fields\Supertable;
 use statikbe\deepl\services\fields\Statik;
+use statikbe\deepl\services\fields\Seomatic;
 use statikbe\deepl\services\MapperService;
 use yii\base\Event;
 
@@ -37,6 +38,7 @@ use yii\base\Event;
  * @property CTA cta
  * @property Positionfieldtype positionfieldtype
  * @property Statik statik
+ * @property Seomatic seomatic;
  */
 class Deepl extends Plugin
 {
@@ -94,6 +96,7 @@ class Deepl extends Plugin
             'cta' => CTA::class,
             'positionfieldtype' => Positionfieldtype::class,
             'statik' => Statik::class,
+            'seomatic' => Seomatic::class,
         ]);
 
 
