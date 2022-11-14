@@ -9,7 +9,7 @@ use statikbe\cta\fields\CTAField;
 use statikbe\deepl\Deepl;
 
 
-class CTA extends Component
+class cta extends Component
 {
 
     public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)

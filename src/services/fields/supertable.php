@@ -11,7 +11,7 @@ use verbb\supertable\elements\SuperTableBlockElement;
 use verbb\supertable\fields\SuperTableField;
 
 
-class Supertable extends Component
+class supertable extends Component
 {
 
     public function SuperTableField(SuperTableField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)

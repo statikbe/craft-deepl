@@ -14,7 +14,7 @@ use craft\models\Site;
 use statikbe\deepl\Deepl;
 
 
-class Fields extends Component
+class fields extends Component
 {
 
     /**

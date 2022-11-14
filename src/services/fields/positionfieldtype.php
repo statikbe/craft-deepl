@@ -8,7 +8,7 @@ use craft\base\Element;
 use craft\models\Site;
 use rias\positionfieldtype\fields\Position;
 
-class Positionfieldtype extends Component
+class positionfieldtype extends Component
 {
 
     public function Position(Position $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool

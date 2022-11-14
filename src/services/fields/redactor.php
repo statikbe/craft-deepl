@@ -10,7 +10,7 @@ use craft\models\Site;
 use craft\redactor\Field;
 use statikbe\deepl\Deepl;
 
-class Redactor extends Component
+class redactor extends Component
 {
 
     public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool

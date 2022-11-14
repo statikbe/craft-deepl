@@ -6,34 +6,32 @@ use craft\base\Component;
 use craft\base\Element;
 use craft\base\Field as BaseField;
 use craft\models\Site;
-use nystudio107\seomatic\fields\SeoSettings;
 use statikbe\deepl\Deepl;
+use studioespresso\seofields\fields\SeoField;
 
 
-class Seomatic extends Component
+class seofields extends Component
 {
 
     /**
-     * @param SeoSettings $field
+     * @param SeoField $field
      * @param Element $sourceEntry
      * @param Site $sourceSite
      * @param Site $targetSite
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function SeoSettings(SeoSettings $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function SeoField(SeoField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
-        $metaBundle = $sourceEntry->getFieldValue($field->handle);
+        $model = $sourceEntry->getFieldValue($field->handle);
 
-        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $metaBundle) {
-            return $metaBundle;
+        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $model) {
+            return $model;
         }
 
-        if (!$metaBundle) {
+        if (!$model) {
             return "";
         }
-
-        $model = $metaBundle->metaGlobalVars;
 
         $data = $model->toArray();
         foreach ($data as $key => $value) {
@@ -49,9 +47,7 @@ class Seomatic extends Component
             }
         }
 
-        $metaBundle->metaGlobalVars = $data;
-
-        return $metaBundle;
+        return $data;
     }
 
 }

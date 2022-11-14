@@ -14,16 +14,16 @@ use Monolog\Formatter\LineFormatter;
 use Psr\Log\LogLevel;
 use statikbe\deepl\models\Settings;
 use statikbe\deepl\services\ApiService;
-use statikbe\deepl\services\fields\CKEditor;
-use statikbe\deepl\services\fields\Configvaluesfield;
-use statikbe\deepl\services\fields\CTA;
-use statikbe\deepl\services\fields\Fields;
-use statikbe\deepl\services\fields\Positionfieldtype;
-use statikbe\deepl\services\fields\Redactor;
-use statikbe\deepl\services\fields\Supertable;
-use statikbe\deepl\services\fields\Statik;
-use statikbe\deepl\services\fields\Seomatic;
-use statikbe\deepl\services\fields\Seofields;
+use statikbe\deepl\services\fields\ckeditor;
+use statikbe\deepl\services\fields\configvaluesfield;
+use statikbe\deepl\services\fields\cta;
+use statikbe\deepl\services\fields\fields;
+use statikbe\deepl\services\fields\positionfieldtype;
+use statikbe\deepl\services\fields\redactor;
+use statikbe\deepl\services\fields\supertable;
+use statikbe\deepl\services\fields\statik;
+use statikbe\deepl\services\fields\seomatic;
+use statikbe\deepl\services\fields\seofields;
 use statikbe\deepl\services\MapperService;
 use yii\base\Event;
 
@@ -31,16 +31,16 @@ use yii\base\Event;
 /**
  * @property ApiService api
  * @property MapperService mapper
- * @property Redactor redactor
- * @property CKEditor ckeditor
- * @property Fields fields
- * @property Supertable supertable
- * @property Configvaluesfield configvaluesfield
- * @property CTA cta
- * @property Positionfieldtype positionfieldtype
- * @property Statik statik
- * @property Seomatic seomatic;
- * @property Seofields seofileds;
+ * @property redactor redactor
+ * @property ckeditor ckeditor
+ * @property fields fields
+ * @property supertable supertable
+ * @property configvaluesfield configvaluesfield
+ * @property cta cta
+ * @property positionfieldtype positionfieldtype
+ * @property statik statik
+ * @property seomatic seomatic;
+ * @property seofields seofileds;
  */
 class Deepl extends Plugin
 {
@@ -90,16 +90,16 @@ class Deepl extends Plugin
         $this->setComponents([
             'api' => ApiService::class,
             'mapper' => MapperService::class,
-            'redactor' => Redactor::class,
-            'ckeditor' => CKEditor::class,
-            'fields' => Fields::class,
-            'supertable' => Supertable::class,
-            'configvaluesfield' => Configvaluesfield::class,
-            'cta' => CTA::class,
-            'positionfieldtype' => Positionfieldtype::class,
-            'statik' => Statik::class,
-            'seomatic' => Seomatic::class,
-            'seofields' => Seofields::class,
+            'redactor' => redactor::class,
+            'ckeditor' => ckeditor::class,
+            'fields' => fields::class,
+            'supertable' => supertable::class,
+            'configvaluesfield' => configvaluesfield::class,
+            'cta' => cta::class,
+            'positionfieldtype' => positionfieldtype::class,
+            'statik' => statik::class,
+            'seomatic' => seomatic::class,
+            'seofields' => seofields::class,
         ]);
 
 

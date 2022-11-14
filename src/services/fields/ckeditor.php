@@ -9,7 +9,7 @@ use craft\base\Field as BaseField;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 
-class CKEditor extends Component
+class ckeditor extends Component
 {
 
     public function Field(\craft\ckeditor\Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool

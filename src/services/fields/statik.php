@@ -10,7 +10,7 @@ use craft\models\Site;
 use statikbe\deepl\Deepl;
 
 
-class Statik extends Component
+class statik extends Component
 {
 
     /**
