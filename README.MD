@@ -62,6 +62,7 @@ The plugin currently supports (for either translation or for copying values)
 - Plain Text
 - Matrix
 - Assets
+- Entry
 
 #### Third party fields
 - craftcms/redactor
@@ -70,6 +71,8 @@ The plugin currently supports (for either translation or for copying values)
 - hybridinteractive/craft-position-fieldtype
 - statikbe/craft-config-values 
 - statikbe/craft-cta-field
+- studioespresso/craft-seo-fields
+- nystudio107/craft-seomatic
 
 
 ## Roadmap

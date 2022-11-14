@@ -19,7 +19,7 @@ class Fields extends Component
 
     /**
      * @param PlainText $field
-     * @param Entry $sourceEntry
+     * @param Element $sourceEntry
      * @param Site $sourceSite
      * @param Site $targetSite
      * @return false|string
