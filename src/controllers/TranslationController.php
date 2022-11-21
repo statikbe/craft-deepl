@@ -37,6 +37,13 @@ class TranslationController extends Controller
             );
             $targetEntry->title = $newTitle;
 
+            $newSlug = Deepl::getInstance()->api->translateString(
+                $sourceEntry->slug,
+                $sourceSite->language,
+                $destinationSite->language
+            );
+            $targetEntry->slug = $newSlug;
+
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 
             // Save the translated version of the entry as a new draft
