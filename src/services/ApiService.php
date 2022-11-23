@@ -27,7 +27,8 @@ class ApiService extends Component
         $translation = $this->translator->translateText(
             $text,
             $this->getLanguageString($sourceLang, false),
-            $this->getLanguageString($targetLang, true)
+            $this->getLanguageString($targetLang, true),
+            ["tag_handling"=>"xml"]
         );
 
         return $translation->text;
