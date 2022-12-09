@@ -12,7 +12,7 @@
             {% set siteParam = craft.app.request.getParam('site') %}
             {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
 
-            {% set otherSites = entry.section.siteSettings|filter(v => v.siteId != selectedSite.id) %}
+            {% set otherSites = entry.section.siteSettings|filter(v => v.siteId != selectedSite.id and craft.app.sites.getSiteById(v.siteId).groupId == selectedSite.groupId) %}
             {% if selectedSite.primary and not settings.primarySiteTranslation %}
                 <div class="field">
                     <div class="input ltr">
