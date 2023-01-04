@@ -1,0 +1,18 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{% import "_includes/forms" as forms %}
+
+
+{{ forms.autosuggestfield({
+    label: 'DeepL API key'|t('deepl'),
+    name: 'apiKey',
+    instructions: 'Your API key can be found in your [DeepL Account](https://www.deepl.com/account/summary)'|t('deepl'),
+    suggestEnvVars: true,
+    value: settings.apiKey,
+}) }}
+
+ {{ forms.lightswitchField({
+     label:        "Allow entries in the primary site to be translated"|t('deepl'),
+     id:           'primarySiteTranslation',
+     name:         'primarySiteTranslation',
+     on:           settings.primarySiteTranslation,
+ }) }}
