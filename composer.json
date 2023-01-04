@@ -8,11 +8,13 @@
         "cms",
         "craftcms",
         "craft-plugin",
-        "translate"
+        "translate",
+        "deepl"
     ],
     "support": {
         "docs": "https://github.com/statikbe/craft-deepl/blob/main/README.md",
-        "issues": "https://github.com/statikbe/craft-deepl/issues"
+        "issues": "https://github.com/statikbe/craft-deepl/issues",
+        "source": "https://github.com/statikbe/craft-deepl"
     },
     "license": "MIT",
     "authors": [
@@ -23,6 +25,10 @@
         {
             "name": "Jan Henckens",
             "email": "jan@statik.be"
+        },
+        {
+            "name": "Hannah De Wachter",
+            "email": "hannah@statik.be"
         }
     ],
     "require": {
