@@ -11,6 +11,7 @@ use craft\helpers\Cp;
 use craft\web\Controller;
 use statikbe\deepl\Deepl;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 
 class TranslationController extends Controller
 {
@@ -18,6 +19,7 @@ class TranslationController extends Controller
     {
         // TODO: run check to see if we have an API key
         try {
+            $settings = Deepl::getInstance()->getSettings();
             $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
             $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
             $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
@@ -29,6 +31,10 @@ class TranslationController extends Controller
             $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
             $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
 
+//            if(!$sourceEntry || !$targetEntry) {
+//                throw new InvalidConfigException("Translated entry not found", Deepl::class);
+//            }
+
             //TODO Handle different section propagation methods ?
 
             $newTitle = Deepl::getInstance()->api->translateString(
@@ -38,7 +44,11 @@ class TranslationController extends Controller
             );
             $targetEntry->title = $newTitle;
 
-            $targetEntry->slug = "";
+            if ($settings->translateSlugs) {
+                $targetEntry->slug = "";
+            } else {
+                $targetEntry->slug = $sourceEntry->slug;
+            }
 
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 

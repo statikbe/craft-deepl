@@ -8,5 +8,7 @@ class Settings extends Model
 {
     public string $apiKey = '';
 
+    public bool $translateSlugs = true;
+
     public bool $primarySiteTranslation = false;
 }

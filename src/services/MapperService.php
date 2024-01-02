@@ -6,7 +6,6 @@ use Craft;
 use craft\base\Component;
 use craft\base\Element;
 use craft\elements\db\ElementQuery;
-use craft\elements\Entry;
 use craft\errors\InvalidFieldException;
 use statikbe\deepl\Deepl;
 use yii\log\Logger;
