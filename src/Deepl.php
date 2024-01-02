@@ -5,6 +5,7 @@ namespace statikbe\deepl;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -61,11 +62,19 @@ class Deepl extends Plugin
             Entry::EVENT_DEFINE_SIDEBAR_HTML,
             function(DefineHtmlEvent $event) {
                 /** @var Entry $entry */
-//                if ($event->sender->getIsDraft()) {
-//                    return;
-//                }
-                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_sidebar',
+                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_entries',
                     ["entry" => $event->sender, "settings" => $this->getSettings()]);
+                $event->html .= $template;
+            }
+        );
+
+        Event::on(
+            Asset::class,
+            Asset::EVENT_DEFINE_SIDEBAR_HTML,
+            function(DefineHtmlEvent $event) {
+                /** @var Asset $asset */
+                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_assets',
+                    ["asset" => $event->sender, "settings" => $this->getSettings()]);
                 $event->html .= $template;
             }
         );
@@ -131,6 +140,9 @@ class Deepl extends Plugin
                     "permissions" => [
                         'deepl:translate-entries' => [
                             'label' => Craft::t('deepl', 'Translate entries'),
+                        ],
+                        'deepl:translate-assets' => [
+                            'label' => Craft::t('deepl', 'Translate assets'),
                         ],
                     ],
                 ];

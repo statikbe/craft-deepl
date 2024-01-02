@@ -5,6 +5,7 @@ namespace statikbe\deepl\controllers;
 use Craft;
 use craft\base\Element;
 use craft\behaviors\DraftBehavior;
+use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\helpers\Cp;
 use craft\web\Controller;
@@ -66,6 +67,51 @@ class TranslationController extends Controller
             'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
         ]);
     }
+
+    public function actionAssets()
+    {
+        // TODO: run check to see if we have an API key
+        try {
+            $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
+            $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
+            $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
+
+            $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
+            $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
+
+
+            $sourceEntry = Asset::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
+            $targetEntry = Asset::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
+
+            //TODO Handle different section propagation methods ?
+
+            $newTitle = Deepl::getInstance()->api->translateString(
+                $sourceEntry->title,
+                $sourceSite->language,
+                $destinationSite->language
+            );
+            $targetEntry->title = $newTitle;
+
+            $targetEntry->slug = "";
+
+            $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
+
+            $targetEntry->setFieldValues($newValues);
+        } catch (Exception $e) {
+            $this->returnError($sourceEntry);
+        }
+
+        if (!$targetEntry->validate()) {
+            $this->returnError($sourceEntry);
+        }
+
+        Craft::$app->getElements()->saveElement($targetEntry);
+
+        return $this->asSuccess("Asset automaticly translated - please double check the translation", [], $targetEntry->getCpEditUrl(), [
+            'details' => !$targetEntry->dateDeleted ? Cp::elementHtml($targetEntry) : null,
+        ]);
+    }
+
 
     private function returnError(Entry $entry)
     {

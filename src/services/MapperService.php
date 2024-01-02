@@ -17,7 +17,7 @@ class MapperService extends Component
     {
     }
 
-    public function entryMapper(Entry $sourceEntry, Entry $targetEntry)
+    public function entryMapper(Element $sourceEntry, Element $targetEntry)
     {
         $sourceSite = Craft::$app->getSites()->getSiteById($sourceEntry->siteId);
         $targetSite = Craft::$app->getSites()->getSiteById($targetEntry->siteId);
