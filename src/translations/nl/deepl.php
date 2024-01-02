@@ -6,5 +6,5 @@ return [
     "From {locale}" => "Vanuit het {locale}",
     "DeepL API key" => "DeepL API sleutel",
     "Your API key can be found in your [DeepL Account](https://www.deepl.com/account/summary)" => "Je kan je API sleutel vinden in de je [DeepL account](https://www.deepl.com/account/summary)",
-    "Allow entries in the primary site to be translated" => "Laat toe dat entries uit de primaire site vertaald kunnen worden"
+    "Allow entries in the primary site to be translated" => "Laat toe dat entries uit de primaire site vertaald kunnen worden",
 ];

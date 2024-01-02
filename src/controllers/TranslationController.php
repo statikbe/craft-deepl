@@ -2,12 +2,12 @@
 
 namespace statikbe\deepl\controllers;
 
+use Craft;
 use craft\base\Element;
 use craft\behaviors\DraftBehavior;
 use craft\elements\Entry;
 use craft\helpers\Cp;
 use craft\web\Controller;
-use Craft;
 use statikbe\deepl\Deepl;
 use yii\base\Exception;
 
@@ -52,8 +52,6 @@ class TranslationController extends Controller
             $draft->setCanonical($targetEntry);
             $draft->setScenario(Element::SCENARIO_ESSENTIALS);
             $draft->setFieldValues($newValues);
-
-
         } catch (Exception $e) {
             $this->returnError($sourceEntry);
         }
@@ -67,7 +65,6 @@ class TranslationController extends Controller
         return $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
             'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
         ]);
-
     }
 
     private function returnError(Entry $entry)

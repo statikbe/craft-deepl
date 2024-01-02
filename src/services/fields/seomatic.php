@@ -9,10 +9,8 @@ use craft\models\Site;
 use nystudio107\seomatic\fields\SeoSettings;
 use statikbe\deepl\Deepl;
 
-
 class seomatic extends Component
 {
-
     /**
      * @param SeoSettings $field
      * @param Element $sourceEntry
@@ -25,7 +23,7 @@ class seomatic extends Component
     {
         $metaBundle = $sourceEntry->getFieldValue($field->handle);
 
-        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $metaBundle) {
+        if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $metaBundle) {
             return $metaBundle;
         }
 
@@ -37,7 +35,7 @@ class seomatic extends Component
 
         $data = $model->toArray();
         foreach ($data as $key => $value) {
-            if($value and !is_array($value)){
+            if ($value and !is_array($value)) {
                 $translation = Deepl::getInstance()->api->translateString(
                     $value,
                     $sourceSite->language,
@@ -53,5 +51,4 @@ class seomatic extends Component
 
         return $metaBundle;
     }
-
 }

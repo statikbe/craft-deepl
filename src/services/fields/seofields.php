@@ -9,10 +9,8 @@ use craft\models\Site;
 use statikbe\deepl\Deepl;
 use studioespresso\seofields\fields\SeoField;
 
-
 class seofields extends Component
 {
-
     /**
      * @param SeoField $field
      * @param Element $sourceEntry
@@ -25,7 +23,7 @@ class seofields extends Component
     {
         $model = $sourceEntry->getFieldValue($field->handle);
 
-        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $model) {
+        if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $model) {
             return $model;
         }
 
@@ -35,7 +33,7 @@ class seofields extends Component
 
         $data = $model->toArray();
         foreach ($data as $key => $value) {
-            if($value and !is_array($value)){
+            if ($value and !is_array($value)) {
                 $translation = Deepl::getInstance()->api->translateString(
                     $value,
                     $sourceSite->language,
@@ -49,5 +47,4 @@ class seofields extends Component
 
         return $data;
     }
-
 }

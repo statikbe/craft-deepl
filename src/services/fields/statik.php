@@ -5,14 +5,12 @@ namespace statikbe\deepl\services\fields;
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\Field as BaseField;
-use modules\statik\fields\AnchorLink;
 use craft\models\Site;
+use modules\statik\fields\AnchorLink;
 use statikbe\deepl\Deepl;
-
 
 class statik extends Component
 {
-
     /**
      * @param AnchorLink $field
      * @param Element $sourceEntry
@@ -25,7 +23,7 @@ class statik extends Component
     {
         $content = $sourceEntry->getFieldValue($field->handle);
 
-        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
+        if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
             return $content;
         }
 
@@ -39,5 +37,4 @@ class statik extends Component
             $targetSite->language
         );
     }
-
 }

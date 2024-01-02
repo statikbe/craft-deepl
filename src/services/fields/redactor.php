@@ -12,7 +12,6 @@ use statikbe\deepl\Deepl;
 
 class redactor extends Component
 {
-
     public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
@@ -30,8 +29,5 @@ class redactor extends Component
             $sourceSite->language,
             $targetSite->language
         );
-
-
     }
-
 }

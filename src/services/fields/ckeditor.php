@@ -11,7 +11,6 @@ use statikbe\deepl\Deepl;
 
 class ckeditor extends Component
 {
-
     public function Field(\craft\ckeditor\Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
@@ -29,8 +28,5 @@ class ckeditor extends Component
             $sourceSite->language,
             $targetSite->language
         );
-
-
     }
-
 }

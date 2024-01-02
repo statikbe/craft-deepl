@@ -5,7 +5,6 @@ namespace statikbe\deepl\services\fields;
 use craft\base\Component;
 use craft\base\Element;
 use craft\base\Field as BaseField;
-use craft\elements\Entry;
 use craft\elements\MatrixBlock;
 use craft\errors\InvalidFieldException;
 use craft\fields\Matrix;
@@ -13,10 +12,8 @@ use craft\fields\PlainText;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 
-
 class fields extends Component
 {
-
     /**
      * @param PlainText $field
      * @param Element $sourceEntry
@@ -28,7 +25,7 @@ class fields extends Component
     public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
         $content = $sourceEntry->getFieldValue($field->handle);
-        if($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
+        if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
             return $content;
         }
 
@@ -72,19 +69,17 @@ class fields extends Component
                         );
                         $data[$block->id]['fields'][$blockField->handle] = $translation;
                     }
-                }catch (InvalidFieldException $e) {
+                } catch (InvalidFieldException $e) {
                     $data[$block->id]['fields'][$blockField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $blockField->handle);
                     \Craft::error("Matrix - Fieldtype not supported: " . get_class($field), __CLASS__);
                 }
             }
 
-            if(isset($data[$block->id])  && $data[$block->id] > 0) {
+            if (isset($data[$block->id]) && $data[$block->id] > 0) {
                 $data[$block->id]['type'] = $blockType->handle;
                 $data[$block->id]['enabled'] = true;
             }
         }
         return $data;
     }
-
-
 }

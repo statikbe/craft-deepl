@@ -10,11 +10,9 @@ use rias\positionfieldtype\fields\Position;
 
 class positionfieldtype extends Component
 {
-
     public function Position(Position $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         return $content;
     }
-
 }
