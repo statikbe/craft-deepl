@@ -5,6 +5,7 @@ namespace statikbe\deepl;
 use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
+use craft\elements\Asset;
 use craft\elements\Entry;
 use craft\events\DefineHtmlEvent;
 use craft\events\RegisterUserPermissionsEvent;
@@ -20,13 +21,12 @@ use statikbe\deepl\services\fields\cta;
 use statikbe\deepl\services\fields\fields;
 use statikbe\deepl\services\fields\positionfieldtype;
 use statikbe\deepl\services\fields\redactor;
-use statikbe\deepl\services\fields\supertable;
-use statikbe\deepl\services\fields\statik;
-use statikbe\deepl\services\fields\seomatic;
 use statikbe\deepl\services\fields\seofields;
+use statikbe\deepl\services\fields\seomatic;
+use statikbe\deepl\services\fields\statik;
+use statikbe\deepl\services\fields\supertable;
 use statikbe\deepl\services\MapperService;
 use yii\base\Event;
-
 
 /**
  * @property ApiService api
@@ -44,7 +44,6 @@ use yii\base\Event;
  */
 class Deepl extends Plugin
 {
-
     public bool $hasCpSection = false;
 
     public bool $hasCpSettings = true;
@@ -61,13 +60,21 @@ class Deepl extends Plugin
         Event::on(
             Entry::class,
             Entry::EVENT_DEFINE_SIDEBAR_HTML,
-            function (DefineHtmlEvent $event) {
+            function(DefineHtmlEvent $event) {
                 /** @var Entry $entry */
-//                if ($event->sender->getIsDraft()) {
-//                    return;
-//                }
-                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_sidebar',
+                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_entries',
                     ["entry" => $event->sender, "settings" => $this->getSettings()]);
+                $event->html .= $template;
+            }
+        );
+
+        Event::on(
+            Asset::class,
+            Asset::EVENT_DEFINE_SIDEBAR_HTML,
+            function(DefineHtmlEvent $event) {
+                /** @var Asset $asset */
+                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_assets',
+                    ["asset" => $event->sender, "settings" => $this->getSettings()]);
                 $event->html .= $template;
             }
         );
@@ -101,8 +108,6 @@ class Deepl extends Plugin
             'seomatic' => seomatic::class,
             'seofields' => seofields::class,
         ]);
-
-
     }
 
     protected function createSettingsModel(): Model
@@ -127,7 +132,7 @@ class Deepl extends Plugin
         Event::on(
             UserPermissions::class,
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
-            function (RegisterUserPermissionsEvent $event) {
+            function(RegisterUserPermissionsEvent $event) {
 
                 // Register our custom permissions
                 $permissions = [
@@ -136,7 +141,10 @@ class Deepl extends Plugin
                         'deepl:translate-entries' => [
                             'label' => Craft::t('deepl', 'Translate entries'),
                         ],
-                    ]
+                        'deepl:translate-assets' => [
+                            'label' => Craft::t('deepl', 'Translate assets'),
+                        ],
+                    ],
                 ];
                 $event->permissions[Craft::t('deepl', 'DeepL')] = $permissions;
             }

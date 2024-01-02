@@ -13,9 +13,8 @@ class ApiService extends Component
 
     public function init(): void
     {
-
         $authKey = App::parseEnv(Deepl::getInstance()->getSettings()->apiKey);
-        if(!$authKey) {
+        if (!$authKey) {
             // Expand this to show a message and/or throw an exception if appropriate.
             return;
         }
@@ -28,11 +27,10 @@ class ApiService extends Component
             $text,
             $this->getLanguageString($sourceLang, false),
             $this->getLanguageString($targetLang, true),
-            ["tag_handling"=>"xml"]
+            ["tag_handling" => "xml"]
         );
 
         return $translation->text;
-
     }
 
     public function getTargetLanguages()

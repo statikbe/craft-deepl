@@ -6,8 +6,9 @@ use craft\base\Model;
 
 class Settings extends Model
 {
-
     public string $apiKey = '';
+
+    public bool $translateSlugs = true;
 
     public bool $primarySiteTranslation = false;
 }

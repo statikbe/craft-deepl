@@ -1,0 +1,38 @@
+{% if currentUser.can('deepl:translate-assets') %}
+    <fieldset>
+        <legend class="h6">{{ "Deepl" }}</legend>
+        <div class="meta">
+            {% if not craft.app.getPlugins().getPlugin('deepl').getSettings().apiKey %}
+                <div class="field">
+                    <div class="input ltr">
+                        {{ "Please provide an API key in the settings."|t('deepl') }}
+                    </div>
+                </div>
+            {% else %}
+                {% set siteParam = craft.app.request.getParam('site') %}
+                {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
+
+                {% set otherSites = craft.app.sites.getEditableSites|filter(
+                    v => v.id != selectedSite.id
+                    and craft.app.sites.getSiteById(v.id).groupId == selectedSite.groupId
+                ) %}
+                    <div class="field">
+                        {{ "Translate this page with content from:"|t("deepl") }}
+                    </div>
+                    {% for site in otherSites %}
+                        {% set site = craft.app.sites.getSiteById(site.id) %}
+                        <div class="field">
+                            <div class="btngroup flex">
+                                <div>
+                                    <a href="{{ actionUrl('deepl/translation/assets', {'entry': asset.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
+                                       class="btn ">
+                                        {{ "From {locale}"|t('deepl', { locale: site.locale.getDisplayName(currentUser.preferences.language) }) }}                            </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+            {% endif %}
+        </div>
+    </fieldset>
+{% endif %}

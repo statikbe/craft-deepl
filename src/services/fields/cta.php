@@ -8,10 +8,8 @@ use craft\models\Site;
 use statikbe\cta\fields\CTAField;
 use statikbe\deepl\Deepl;
 
-
 class cta extends Component
 {
-
     public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
 
@@ -19,7 +17,7 @@ class cta extends Component
 
         $model = $sourceEntry->getFieldValue($field->handle);
         $data = $model->toArray();
-        if($data['customText']) {
+        if ($data['customText']) {
             $translation = Deepl::getInstance()->api->translateString(
                 $data['customText'],
                 $sourceSite->language,
@@ -29,6 +27,4 @@ class cta extends Component
         }
         return $data;
     }
-
-
 }

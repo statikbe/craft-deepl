@@ -10,10 +10,8 @@ use statikbe\deepl\Deepl;
 use verbb\supertable\elements\SuperTableBlockElement;
 use verbb\supertable\fields\SuperTableField;
 
-
 class supertable extends Component
 {
-
     public function SuperTableField(SuperTableField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
     {
         // Handle different types of propagation methods here
@@ -40,7 +38,7 @@ class supertable extends Component
                         );
                         $data[$block->id]['fields'][$blockField->handle] = $translation;
                     }
-                }catch (InvalidFieldException $e) {
+                } catch (InvalidFieldException $e) {
                     // TODO: if string pass the value, of object log not supported$
                     $data[$block->id]['fields'][$blockField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $blockField->handle);
                     \Craft::error("SuperTable - Fieldtype not supported: " . get_class($field), __CLASS__);
@@ -49,8 +47,5 @@ class supertable extends Component
         }
 
         return $data;
-
     }
-
-
 }

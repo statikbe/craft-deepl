@@ -2,7 +2,7 @@
     "name": "statikbe/craft-deepl", 
     "description": "DeepL integration for Craft CMS",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "keywords": [
         "craft",
         "cms",
@@ -35,6 +35,15 @@
         "craftcms/cms": "^4.0.0",
         "deeplcom/deepl-php": "^v0.4.0"
     },
+    "require-dev": {
+        "craftcms/ecs": "dev-main",
+        "craftcms/phpstan": "dev-main"
+    },
+    "scripts": {
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --ansi --fix",
+        "phpstan": "phpstan --memory-limit=1G"
+    },
     "autoload": {
         "psr-4": {
           "statikbe\\deepl\\": "src/"
@@ -47,5 +56,11 @@
         "hasSettings": true,
         "developer": "Statik",
         "class": "statikbe\\deepl\\Deepl"
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
     }
 }

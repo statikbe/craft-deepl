@@ -5,13 +5,23 @@
 {{ forms.autosuggestfield({
     label: 'DeepL API key'|t('deepl'),
     name: 'apiKey',
+    id: 'apiKey',
     instructions: 'Your API key can be found in your [DeepL Account](https://www.deepl.com/account/summary)'|t('deepl'),
     suggestEnvVars: true,
     value: settings.apiKey,
 }) }}
 
+
  {{ forms.lightswitchField({
-     label:        "Allow entries in the primary site to be translated"|t('deepl'),
+     label:        'Translate slugs'|t('deepl'),
+     name:         'translateSlugs',
+     id:           'translateSlugs',
+     instructions: 'If disabled, the source slug will be kept for the translated entry'|t('deepl'),
+     on:           settings.translateSlugs,
+ }) }}
+
+ {{ forms.lightswitchField({
+     label:        'Allow entries in the primary site to be translated'|t('deepl'),
      id:           'primarySiteTranslation',
      name:         'primarySiteTranslation',
      on:           settings.primarySiteTranslation,

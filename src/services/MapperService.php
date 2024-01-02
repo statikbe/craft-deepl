@@ -2,26 +2,21 @@
 
 namespace statikbe\deepl\services;
 
+use Craft;
 use craft\base\Component;
 use craft\base\Element;
 use craft\elements\db\ElementQuery;
-use craft\elements\Entry;
-use craft\errors\FieldNotFoundException;
 use craft\errors\InvalidFieldException;
-use DeepL\Translator;
 use statikbe\deepl\Deepl;
-use Craft;
 use yii\log\Logger;
 
 class MapperService extends Component
 {
-
     public function init(): void
     {
-
     }
 
-    public function entryMapper(Entry $sourceEntry, Entry $targetEntry)
+    public function entryMapper(Element $sourceEntry, Element $targetEntry)
     {
         $sourceSite = Craft::$app->getSites()->getSiteById($sourceEntry->siteId);
         $targetSite = Craft::$app->getSites()->getSiteById($targetEntry->siteId);
@@ -85,7 +80,6 @@ class MapperService extends Component
         } catch (InvalidFieldException $e) {
             Craft::getLogger()->log($e->getMessage(), Logger::LEVEL_INFO, 'deepl');
             throw $e;
-
         }
         return false;
     }
