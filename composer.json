@@ -2,7 +2,7 @@
     "name": "statikbe/craft-deepl", 
     "description": "DeepL integration for Craft CMS",
     "type": "craft-plugin",
-    "version": "1.1.0",
+    "version": "5.0.0-alpha.1",
     "keywords": [
         "craft",
         "cms",
@@ -32,7 +32,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^4.0.0",
+        "craftcms/cms": "^4.0.0|^5.0.0-alpha",
         "deeplcom/deepl-php": "^v0.4.0"
     },
     "require-dev": {
