@@ -55,6 +55,14 @@ class fields extends Component
         foreach ($blocks as $key => $block) {
             $blockType = $block->type;
             $blockFields = $block->getFieldLayout()->getCustomFields();
+            if ($block->title) {
+                $newTitle = Deepl::getInstance()->api->translateString(
+                    $block->title,
+                    $sourceSite->language,
+                    $targetSite->language
+                );
+                $data[$block->id]['title'] = $newTitle;
+            }
             foreach ($blockFields as $blockField) {
                 try {
                     $fieldData = Deepl::getInstance()->mapper->isFieldSupported($blockField);
