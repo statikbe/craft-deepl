@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.0 - 2024-02-05
+### Fixed
+- Only render templates when there are multiple sites
+
 ## 1.1.0 - 2024-01-02
 ### Added
 - Assets can now be translated ([#6](https://github.com/statikbe/craft-deepl/issues/6))
