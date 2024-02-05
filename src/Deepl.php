@@ -57,27 +57,29 @@ class Deepl extends Plugin
         }
         parent::init();
 
-        Event::on(
-            Entry::class,
-            Entry::EVENT_DEFINE_SIDEBAR_HTML,
-            function(DefineHtmlEvent $event) {
-                /** @var Entry $entry */
-                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_entries',
-                    ["entry" => $event->sender, "settings" => $this->getSettings()]);
-                $event->html .= $template;
-            }
-        );
+        if (Craft::$app->getIsMultiSite()) {
+            Event::on(
+                Entry::class,
+                Entry::EVENT_DEFINE_SIDEBAR_HTML,
+                function (DefineHtmlEvent $event) {
+                    /** @var Entry $entry */
+                    $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_entries',
+                        ["entry" => $event->sender, "settings" => $this->getSettings()]);
+                    $event->html .= $template;
+                }
+            );
 
-        Event::on(
-            Asset::class,
-            Asset::EVENT_DEFINE_SIDEBAR_HTML,
-            function(DefineHtmlEvent $event) {
-                /** @var Asset $asset */
-                $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_assets',
-                    ["asset" => $event->sender, "settings" => $this->getSettings()]);
-                $event->html .= $template;
-            }
-        );
+            Event::on(
+                Asset::class,
+                Asset::EVENT_DEFINE_SIDEBAR_HTML,
+                function (DefineHtmlEvent $event) {
+                    /** @var Asset $asset */
+                    $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_assets',
+                        ["asset" => $event->sender, "settings" => $this->getSettings()]);
+                    $event->html .= $template;
+                }
+            );
+        }
 
         // Register a custom log target, keeping the format as simple as possible.
         Craft::getLogger()->dispatcher->targets[] = new MonologTarget([
