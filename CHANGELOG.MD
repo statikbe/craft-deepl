@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0-alpha.3 - 2024-02-05
+### Fixed
+- Only render templates when there are multiple sites
+
 ## 5.0.0-alpha.2
 ### Added
 - Translate the Title of a Matrix Block
@@ -11,6 +15,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ## 5.0.0-alpha.1
 ### Added
 - Support for Craft 5.0.0-alpha
+
+## 1.2.0 - 2024-02-05
+### Fixed
+- Only render templates when there are multiple sites
 
 ## 1.1.0 - 2024-01-02
 ### Added
