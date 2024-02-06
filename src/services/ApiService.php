@@ -4,6 +4,7 @@ namespace statikbe\deepl\services;
 
 use craft\base\Component;
 use craft\helpers\App;
+use DeepL\DeepLException;
 use DeepL\Translator;
 use statikbe\deepl\Deepl;
 
@@ -15,7 +16,7 @@ class ApiService extends Component
     {
         $authKey = App::parseEnv(Deepl::getInstance()->getSettings()->apiKey);
         if (!$authKey) {
-            // Expand this to show a message and/or throw an exception if appropriate.
+            throw new DeepLException('authKey must be a non-empty string');
             return;
         }
         $this->translator = new Translator($authKey);
@@ -33,30 +34,29 @@ class ApiService extends Component
         return $translation->text;
     }
 
-    public function getTargetLanguages()
-    {
-        return $this->translator->getTargetLanguages();
-    }
-
-    public function getSourceLanguages()
-    {
-        return $this->translator->getSourceLanguages();
-    }
-
     public function getLanguageString($string, bool $isTarget = true): string
     {
-        $str = explode('-', $string);
-        $lang = $str[0];
+        if ($isTarget) {
+            $supportedLanguages = $this->translator->getTargetLanguages();
+        } else {
+            $supportedLanguages = $this->translator->getSourceLanguages();
+        }
 
-        // TODO: Better handling for support languages
-        if ($lang === 'en') {
-            if ($isTarget) {
-                return 'en-GB';
+        foreach ($supportedLanguages as $language) {
+            if (str_contains($language->code, strtoupper($string))) {
+                $lang = $language->code;
+                break;
             } else {
-                return "EN";
+                $str = explode('-', $string);
+                $shortLang = $str[0];
+
+                if (str_contains(strtolower($language->code), $shortLang)) {
+                    $lang = $language->code;
+                    break;
+                }
             }
         }
 
-        return strtoupper($lang);
+        return $lang ?? $string;
     }
 }
