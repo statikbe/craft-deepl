@@ -67,6 +67,7 @@ class MapperService extends Component
         $class = get_class($field);
         $fieldProvider = $fieldType[1];
         $fieldType = end($fieldType);
+
         try {
             if (class_exists('statikbe\\deepl\\services\\fields\\' . $fieldProvider)) {
                 if (in_array($fieldType, get_class_methods(Deepl::getInstance()->$fieldProvider))) {
