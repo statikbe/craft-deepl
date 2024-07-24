@@ -13,6 +13,14 @@
 
 
  {{ forms.lightswitchField({
+     label:        'Allow content to be translated across sitegroups'|t('deepl'),
+     instructions: "Use this when your content isn\'t, or isn\'t only, grouped per sitegroup"|t('deepl'),
+     id:           'translateAcrossSiteGroups',
+     name:         'translateAcrossSiteGroups',
+     on:           settings.translateAcrossSiteGroups,
+ }) }}
+
+ {{ forms.lightswitchField({
      label:        'Translate slugs'|t('deepl'),
      name:         'translateSlugs',
      id:           'translateSlugs',

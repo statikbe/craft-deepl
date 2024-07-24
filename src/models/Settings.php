@@ -11,4 +11,6 @@ class Settings extends Model
     public bool $translateSlugs = true;
 
     public bool $primarySiteTranslation = false;
+
+    public bool $translateAcrossSiteGroups = false;
 }
