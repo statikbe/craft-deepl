@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.4.0 - 2024-07-24
+### Added
+- Added support for translating content across site groups ([#18](https://github.com/statikbe/craft-deepl/issues/18))
+
+### Fixed
+- Fixed an error that happened when trying to translate empty strings ([#11](https://github.com/statikbe/craft-deepl/issues/11))
+
 ## 1.3.0 - 2024-07-23
 ### Added
 - Added support for verbb/hyper
