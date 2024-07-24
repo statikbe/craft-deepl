@@ -12,25 +12,35 @@
                 {% set siteParam = craft.app.request.getParam('site') %}
                 {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
 
-                {% set otherSites = craft.app.sites.getEditableSites|filter(
-                    v => v.id != selectedSite.id
-                    and craft.app.sites.getSiteById(v.id).groupId == selectedSite.groupId
-                ) %}
+                {% if craft.app.getPlugins().getPlugin('deepl').getSettings().translateAcrossSiteGroups %}
+                    {% set otherSites = craft.app.sites.getEditableSites|filter(
+                        v => v.id != selectedSite.id) %}
+                {% else %}
+                    {% set otherSites = craft.app.sites.getEditableSites|filter(
+                        v => v.id != selectedSite.id
+                        and craft.app.sites.getSiteById(v.id).groupId == selectedSite.groupId
+                    ) %}
+                {% endif %}
+                <div class="field">
+                    {{ "Translate this page with content from:"|t("deepl") }}
+                </div>
+                {% for site in otherSites %}
+                    {% set site = craft.app.sites.getSiteById(site.id) %}
                     <div class="field">
-                        {{ "Translate this page with content from:"|t("deepl") }}
-                    </div>
-                    {% for site in otherSites %}
-                        {% set site = craft.app.sites.getSiteById(site.id) %}
-                        <div class="field">
-                            <div class="btngroup flex">
-                                <div>
-                                    <a href="{{ actionUrl('deepl/translation/assets', {'entry': asset.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
-                                       class="btn ">
-                                        {{ "From {locale}"|t('deepl', { locale: site.locale.getDisplayName(currentUser.preferences.language) }) }}                            </a>
-                                </div>
+                        <div class="btngroup flex">
+                            <div>
+                                <a href="{{ actionUrl('deepl/translation/assets', {'entry': asset.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
+                                   class="btn ">
+                                    {% if craft.app.getPlugins().getPlugin('deepl').getSettings().translateAcrossSiteGroups %}
+                                        {{ "From {locale}"|t('deepl', { locale: site.name ~ ' ' ~'(' ~ site.locale.getDisplayName(currentUser.preferences.language) ~ ')' }) }}
+                                    {% else %}
+                                        {{ "From {locale}"|t('deepl', { locale: site.locale.getDisplayName(currentUser.preferences.language) }) }}
+                                    {% endif %}
+                                </a>
                             </div>
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
 
             {% endif %}
         </div>
