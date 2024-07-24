@@ -23,6 +23,10 @@ class ApiService extends Component
 
     public function translateString($text, $sourceLang, $targetLang)
     {
+        if(empty($text)) {
+            return $text;
+        }
+
         $translation = $this->translator->translateText(
             $text,
             $this->getLanguageString($sourceLang, false),
