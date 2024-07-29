@@ -13,4 +13,6 @@ class Settings extends Model
     public bool $primarySiteTranslation = false;
 
     public bool $translateAcrossSiteGroups = false;
+
+    public array $glossaries = [];
 }

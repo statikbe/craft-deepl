@@ -26,12 +26,14 @@ use statikbe\deepl\services\fields\seofields;
 use statikbe\deepl\services\fields\seomatic;
 use statikbe\deepl\services\fields\statik;
 use statikbe\deepl\services\fields\supertable;
+use statikbe\deepl\services\GlossaryService;
 use statikbe\deepl\services\MapperService;
 use yii\base\Event;
 
 /**
  * @property ApiService api
  * @property MapperService mapper
+ * @property GlossaryService glossary
  * @property redactor redactor
  * @property ckeditor ckeditor
  * @property fields fields
@@ -101,6 +103,7 @@ class Deepl extends Plugin
         $this->setComponents([
             'api' => ApiService::class,
             'mapper' => MapperService::class,
+            'glossary' => GlossaryService::class,
             'redactor' => redactor::class,
             'ckeditor' => ckeditor::class,
             'fields' => fields::class,
