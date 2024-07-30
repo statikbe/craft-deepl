@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.0 - 2024-07-30
+### Added
+- Added support for glossaries
+- Added "Copy content" function
+- Upgraded deeplcom/deepl-php to ^v1.8.0 or later
+
 ## 1.4.0 - 2024-07-24
 ### Added
 - Added support for translating content across site groups ([#18](https://github.com/statikbe/craft-deepl/issues/18))
