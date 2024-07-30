@@ -19,6 +19,7 @@ use statikbe\deepl\services\fields\ckeditor;
 use statikbe\deepl\services\fields\configvaluesfield;
 use statikbe\deepl\services\fields\cta;
 use statikbe\deepl\services\fields\fields;
+use statikbe\deepl\services\fields\hyper;
 use statikbe\deepl\services\fields\positionfieldtype;
 use statikbe\deepl\services\fields\redactor;
 use statikbe\deepl\services\fields\seofields;
@@ -41,6 +42,7 @@ use yii\base\Event;
  * @property statik statik
  * @property seomatic seomatic;
  * @property seofields seofileds;
+ * @property hyper hyper;
  */
 class Deepl extends Plugin
 {
@@ -109,6 +111,7 @@ class Deepl extends Plugin
             'statik' => statik::class,
             'seomatic' => seomatic::class,
             'seofields' => seofields::class,
+            'hyper' => hyper::class,
         ]);
     }
 
