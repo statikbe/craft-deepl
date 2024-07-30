@@ -34,3 +34,13 @@
      name:         'primarySiteTranslation',
      on:           settings.primarySiteTranslation,
  }) }}
+
+<hr>
+
+{{ forms.lightswitchField({
+    label:        'Enable the "Copy content" feature'|t('deepl'),
+    instructions: 'This skips translation and simply copies all values to a draft - note that this still runs through the same code so is bound to the same supported fields as the translate function'|t('deepl'),
+    id:           'copyContent',
+    name:         'copyContent',
+    on:           settings.copyContent,
+}) }}

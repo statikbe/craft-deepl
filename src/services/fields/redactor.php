@@ -12,7 +12,7 @@ use statikbe\deepl\Deepl;
 
 class redactor extends Component
 {
-    public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
+    public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
 
@@ -27,7 +27,8 @@ class redactor extends Component
         return Deepl::getInstance()->api->translateString(
             $sourceEntry->getFieldValue($field->handle)->getParsedContent(),
             $sourceSite->language,
-            $targetSite->language
+            $targetSite->language,
+            $translate
         );
     }
 }

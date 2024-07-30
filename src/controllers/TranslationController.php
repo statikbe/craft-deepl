@@ -24,6 +24,8 @@ class TranslationController extends Controller
             $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
             $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
 
+            $translate = Craft::$app->getRequest()->getQueryParam('translate', 1);
+
             $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
             $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
 
@@ -37,10 +39,12 @@ class TranslationController extends Controller
 
             //TODO Handle different section propagation methods ?
 
+            // Check if we're translating or just creating a copy
             $newTitle = Deepl::getInstance()->api->translateString(
                 $sourceEntry->title,
                 $sourceSite->language,
-                $destinationSite->language
+                $destinationSite->language,
+                $translate
             );
             $targetEntry->title = $newTitle;
 
@@ -86,6 +90,8 @@ class TranslationController extends Controller
             $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
             $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
 
+            $translate = Craft::$app->getRequest()->getQueryParam('translate', 1);
+
             $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
             $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
 
@@ -98,7 +104,8 @@ class TranslationController extends Controller
             $newTitle = Deepl::getInstance()->api->translateString(
                 $sourceEntry->title,
                 $sourceSite->language,
-                $destinationSite->language
+                $destinationSite->language,
+                $translate
             );
             $targetEntry->title = $newTitle;
 

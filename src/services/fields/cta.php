@@ -10,7 +10,7 @@ use statikbe\deepl\Deepl;
 
 class cta extends Component
 {
-    public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
     {
 
         /** @var \statikbe\cta\models\CTA $model */
@@ -21,7 +21,8 @@ class cta extends Component
             $translation = Deepl::getInstance()->api->translateString(
                 $data['customText'],
                 $sourceSite->language,
-                $targetSite->language
+                $targetSite->language,
+                $translate
             );
             $data['customText'] = $translation;
         }

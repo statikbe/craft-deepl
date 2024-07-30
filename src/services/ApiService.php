@@ -56,8 +56,12 @@ class ApiService extends Component
         }
     }
 
-    public function translateString($text, $sourceLang, $targetLang)
+    public function translateString($text, $sourceLang, $targetLang, $translate = true)
     {
+        if (!$translate) {
+            return $text;
+        }
+
         if (empty($text)) {
             return $text;
         }

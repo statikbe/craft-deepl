@@ -22,7 +22,7 @@ class fields extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
@@ -36,7 +36,8 @@ class fields extends Component
         return Deepl::getInstance()->api->translateString(
             $sourceEntry->getFieldValue($field->handle),
             $sourceSite->language,
-            $targetSite->language
+            $targetSite->language,
+            $translate
         );
     }
 
