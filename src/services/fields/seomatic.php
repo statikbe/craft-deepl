@@ -19,7 +19,7 @@ class seomatic extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function SeoSettings(SeoSettings $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translalte = true)
+    public function SeoSettings(SeoSettings $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
     {
         $metaBundle = $sourceEntry->getFieldValue($field->handle);
 

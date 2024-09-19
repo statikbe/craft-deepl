@@ -12,7 +12,7 @@ use verbb\supertable\fields\SuperTableField;
 
 class supertable extends Component
 {
-    public function SuperTableField(SuperTableField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function SuperTableField(SuperTableField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
     {
         // Handle different types of propagation methods here
 

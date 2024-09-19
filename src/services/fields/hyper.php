@@ -12,7 +12,7 @@ use verbb\hyper\models\LinkCollection;
 
 class hyper extends Component
 {
-    public function HyperField(HyperField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate)
+    public function HyperField(HyperField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
     {
 
         /** @var LinkCollection $model */
