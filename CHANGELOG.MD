@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.1 - 2024-09-19
+### Fixed
+- Fixed a crash on certain field types after 1.5.0
+
 ## 1.5.0 - 2024-07-30
 ### Added
 - Added support for glossaries
