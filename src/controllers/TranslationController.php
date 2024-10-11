@@ -48,13 +48,13 @@ class TranslationController extends Controller
             );
             $targetEntry->title = $newTitle;
 
-            if ($settings->translateSlugs) {
+            if ($settings->translateSlugs and $translate) {
                 $targetEntry->slug = "";
             } else {
                 $targetEntry->slug = $sourceEntry->slug;
             }
 
-            $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
+            $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry, $translate);
 
             // Save the translated version of the entry as a new draft
             /** @var Element|DraftBehavior $element */
