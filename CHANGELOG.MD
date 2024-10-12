@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.3 - 2024-10-12
+### Fixed
+- Fixed Hyper element translations
+
 ## 1.5.2 - 2024-10-11
 ### Fixed
 - "Copy content" function now works with all fields, not only on title
