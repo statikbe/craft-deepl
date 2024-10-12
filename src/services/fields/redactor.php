@@ -12,7 +12,7 @@ use statikbe\deepl\Deepl;
 
 class redactor extends Component
 {
-    public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true): string|bool
+    public function Field(Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
 

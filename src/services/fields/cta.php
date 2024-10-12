@@ -10,7 +10,7 @@ use statikbe\deepl\Deepl;
 
 class cta extends Component
 {
-    public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
+    public function CTAField(CTAField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry)
     {
 
         /** @var \statikbe\cta\models\CTA $model */

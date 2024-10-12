@@ -19,7 +19,7 @@ class seofields extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function SeoField(SeoField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
+    public function SeoField(SeoField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry)
     {
         $model = $sourceEntry->getFieldValue($field->handle);
 

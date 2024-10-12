@@ -11,7 +11,7 @@ use statikbe\deepl\Deepl;
 
 class ckeditor extends Component
 {
-    public function Field(\craft\ckeditor\Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true): string|bool
+    public function Field(\craft\ckeditor\Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {

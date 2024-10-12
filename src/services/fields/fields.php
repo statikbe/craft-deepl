@@ -22,7 +22,7 @@ class fields extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true)
+    public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry)
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
@@ -47,7 +47,7 @@ class fields extends Component
      * @param Site $sourceSite
      * @param Site $targetSite
      */
-    public function Matrix(Matrix $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function Matrix(Matrix $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry)
     {
         // Handle different types of propagation methods here
         $blocks = $sourceEntry->getFieldValue($field->handle)->all();

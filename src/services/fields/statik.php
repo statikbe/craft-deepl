@@ -19,7 +19,7 @@ class statik extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function AnchorLink(AnchorLink $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true): string|bool
+    public function AnchorLink(AnchorLink $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
 

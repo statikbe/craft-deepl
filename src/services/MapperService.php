@@ -40,7 +40,8 @@ class MapperService extends Component
                         $sourceEntry,
                         $sourceSite,
                         $targetSite,
-                        $translate
+                        $translate,
+                        $targetEntry
                     );
                     $values[$field['handle']] = $translation;
                 }
