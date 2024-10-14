@@ -66,7 +66,9 @@ class fields extends Component
                             $blockField,
                             $block,
                             $sourceSite,
-                            $targetSite
+                            $targetSite,
+                            $translate,
+                            $targetEntry
                         );
                         $data[$block->id]['fields'][$blockField->handle] = $translation;
                     }

@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.4 - 2024-10-14
+### Fixed
+- Fixed crash when translating fields in matrix
+
+
 ## 1.5.3 - 2024-10-12
 ### Fixed
 - Fixed Hyper element translations
