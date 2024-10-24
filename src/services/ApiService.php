@@ -21,13 +21,29 @@ class ApiService extends Component
         $this->translator = new Translator($authKey);
     }
 
-    public function translateString($text, $sourceLang, $targetLang)
+    public function translateString($text, $sourceLang, $targetLang, $translate = true)
     {
+        if (!$translate) {
+            return $text;
+        }
+
+        if (empty($text)) {
+            return $text;
+        }
+
+        $options = ["tag_handling" => "xml"];
+
+        $glossary = Deepl::getInstance()->glossary->getGlossaryForLanguages($sourceLang, $targetLang);
+
+        if ($glossary) {
+            $options['glossary'] = $glossary;
+        }
+
         $translation = $this->translator->translateText(
             $text,
             $this->getLanguageString($sourceLang, false),
             $this->getLanguageString($targetLang, true),
-            ["tag_handling" => "xml"]
+            $options
         );
 
         return $translation->text;
