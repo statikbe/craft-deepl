@@ -4,8 +4,12 @@ namespace statikbe\deepl\services;
 
 use craft\base\Component;
 use craft\helpers\App;
+use DeepL\DeepLException;
+use DeepL\GlossaryEntries;
+use DeepL\GlossaryInfo;
 use DeepL\Translator;
 use statikbe\deepl\Deepl;
+use statikbe\deepl\models\GlossaryModel;
 
 class ApiService extends Component
 {
@@ -19,6 +23,36 @@ class ApiService extends Component
             return;
         }
         $this->translator = new Translator($authKey);
+    }
+
+    public function createGlossary(GlossaryModel $model): GlossaryInfo
+    {
+        $entries = GlossaryEntries::fromEntries($model['entries']);
+        return $this->translator->createGlossary(
+            $model->name,
+            $this->parseLanguage($model->source),
+            $this->parseLanguage($model->target),
+            $entries
+        );
+
+    }
+
+    public function getAllGlossaries()
+    {
+        try {
+            return $this->translator->listGlossaries();
+        } catch (DeeplException $e) {
+            \Craft::error($e->getMessage(), 'deepl');
+        }
+    }
+
+    public function deleteGlossary($id)
+    {
+        try {
+            $this->translator->deleteGlossary($id);
+        } catch (DeepLException $e) {
+            \Craft::error($e->getMessage(), 'deepl');
+        }
     }
 
     public function translateString($text, $sourceLang, $targetLang, $translate = true)
@@ -74,5 +108,11 @@ class ApiService extends Component
         }
 
         return strtoupper($lang);
+    }
+
+    private function parseLanguage(string $language): string
+    {
+        $data = str_split($language, '2');
+        return $data[0];
     }
 }
