@@ -19,7 +19,7 @@ class seomatic extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function SeoSettings(SeoSettings $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function SeoSettings(SeoSettings $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
     {
         $metaBundle = $sourceEntry->getFieldValue($field->handle);
 
@@ -39,7 +39,8 @@ class seomatic extends Component
                 $translation = Deepl::getInstance()->api->translateString(
                     $value,
                     $sourceSite->language,
-                    $targetSite->language
+                    $targetSite->language,
+                    $translate
                 );
                 $data[$key] = $translation;
             } else {

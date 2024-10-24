@@ -12,11 +12,10 @@ use verbb\hyper\models\LinkCollection;
 
 class hyper extends Component
 {
-    public function HyperField(HyperField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function HyperField(HyperField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
     {
-
         /** @var LinkCollection $model */
-        $model = $sourceEntry->getFieldValue($field->handle);
+        $model = $targetEntry->getFieldValue($field->handle);
 
         $links = $model->getLinks();
         $newLinks = [];
@@ -26,7 +25,8 @@ class hyper extends Component
                 $translation = Deepl::getInstance()->api->translateString(
                     $link->linkText,
                     $sourceSite->language,
-                    $targetSite->language
+                    $targetSite->language,
+                    $translate
                 );
                 $link->linkText = $translation;
             }

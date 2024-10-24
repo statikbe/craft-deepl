@@ -19,7 +19,7 @@ class seofields extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function SeoField(SeoField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite)
+    public function SeoField(SeoField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
     {
         $model = $sourceEntry->getFieldValue($field->handle);
 
@@ -37,7 +37,8 @@ class seofields extends Component
                 $translation = Deepl::getInstance()->api->translateString(
                     $value,
                     $sourceSite->language,
-                    $targetSite->language
+                    $targetSite->language,
+                    $translate
                 );
                 $data[$key] = $translation;
             } else {
