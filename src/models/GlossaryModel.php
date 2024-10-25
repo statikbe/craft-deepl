@@ -16,33 +16,39 @@ class GlossaryModel extends Model
 
     public $uid;
 
-    public function populate(array $data)
-    {
-        $sites = \Craft::$app->getSites();
-
-
-        $this->source = $data['source'];
-        $this->target  = $data['target'];
-
-        $this->name = $data['name'];
-
-        $this->entries = $data['entries'];
-
-    }
-
-    public function apiData(): array
+    public function rules(): array
     {
         return [
-            'name' => $this->name,
-            'source_lang' => $this->source_lang,
-            'target_lang' => $this->target_lang,
-            'entries' => $this->entries,
-            'entries_format' => 'csv'
+            [['entries'], 'checkIsArray'],
+            [['name', 'source', 'target'], 'string'],
+            [['name', 'source', 'target', 'entries'], 'required'],
         ];
     }
 
-    private function parseLanguage(string $language): string
+
+    public function populate(array $data): void
     {
-        return $language;
+        if (isset($data['name'])) {
+            $this->name = $data['name'];
+        }
+
+        if (isset($data['source'])) {
+            $this->source = $data['source'];
+        }
+
+        if (isset($data['target'])) {
+            $this->target = $data['target'];
+        }
+
+        if (isset($data['entries'])) {
+            $this->entries = $data['entries'];
+        }
+    }
+
+    public function checkIsArray($attribute): void
+    {
+        if (!is_array($this->$attribute)) {
+            $this->addError($attribute, "{$attribute} is not an array");
+        }
     }
 }

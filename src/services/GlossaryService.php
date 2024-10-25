@@ -14,11 +14,12 @@ use yii\log\Logger;
 
 class GlossaryService extends Component
 {
-    public function init(): void
-    {
-    }
 
-    public function getSettings()
+    /**
+     * Gets all glossary settings from the deepl.php config file
+     * @return array
+     */
+    public function getSettings(): array
     {
         $data = Deepl::getInstance()->getSettings()->glossaries;
         $items = [];
@@ -32,7 +33,13 @@ class GlossaryService extends Component
         return $items;
     }
 
-    public function getGlossaryForLanguages($source, $target)
+    /**
+     * Returns the glossary record matching the source & target languages, or false if no matching record can be found
+     * @param string $source
+     * @param string $target
+     * @return false|mixed|null
+     */
+    public function getGlossaryForLanguages(string $source, string $target)
     {
         $record = GlossaryRecord::find()->andWhere(['source' => $source, 'target' => $target])->one();
         if($record) {

@@ -55,13 +55,19 @@ class ApiService extends Component
         }
     }
 
-    public function translateString($text, $sourceLang, $targetLang, $translate = true)
+    /**
+     * Translates the $string from the $sourceLang to the $targetLang, but only if $translate is set to true
+     *  (translate won't be true if the user clicked the copy button instead of the translate button, in which case we simply return $string)
+     * @param string $text
+     * @param string $sourceLang
+     * @param string $targetLang
+     * @param bool $translate
+     * @return string
+     * @throws DeepLException
+     */
+    public function translateString(string $text, string $sourceLang, string $targetLang, bool $translate = true): string
     {
-        if (!$translate) {
-            return $text;
-        }
-
-        if (empty($text)) {
+        if (!$translate || empty($text)) {
             return $text;
         }
 
