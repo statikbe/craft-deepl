@@ -11,13 +11,13 @@ use statikbe\configvaluesfield\fields\ConfigValuesFieldField;
 
 class configvaluesfield extends Component
 {
-    public function ConfigValuesFieldField(ConfigValuesFieldField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): array|bool|string|null
+    public function ConfigValuesFieldField(ConfigValuesFieldField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true): array|bool|string|null
     {
         if ($field->type === 'dropdown') {
             return $sourceEntry->getFieldValue($field->handle);
-        } else {
-            $content = $sourceEntry->getFieldValue($field->handle);
-            return Json::decodeIfJson($content);
         }
+
+        $content = $sourceEntry->getFieldValue($field->handle);
+        return Json::decodeIfJson($content);
     }
 }

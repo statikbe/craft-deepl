@@ -39,4 +39,52 @@
         {% endif %}
     </div>
 </fieldset>
+
+
+    {% if settings.copyContent %}
+        <fieldset>
+            <legend class="h6">{{ "Copy content" }}</legend>
+            <div class="meta">
+                {% set siteParam = craft.app.request.getParam('site') %}
+                {% set selectedSite = craft.app.sites.getSiteByHandle(siteParam) %}
+
+                {% if craft.app.getPlugins().getPlugin('deepl').getSettings().translateAcrossSiteGroups %}
+                    {% set otherSites = entry.section.siteSettings|filter(v => v.siteId != selectedSite.id) %}
+                {% else %}
+                    {% set otherSites = entry.section.siteSettings|filter(v => v.siteId != selectedSite.id and craft.app.sites.getSiteById(v.siteId).groupId == selectedSite.groupId) %}
+                {% endif %}
+
+                {% if selectedSite.primary and not settings.primarySiteTranslation %}
+                    <div class="field">
+                        <div class="input ltr">
+                            {{ "Entries in the primary site are not allowed to be translated. Contact support for further questions."|t('deepl') }}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="field">
+                        <h3>
+                            {{ "Copy this page with content from:"|t("deepl")|raw }}
+                        </h3>
+                    </div>
+                    {% for site in otherSites %}
+                        {% set site = craft.app.sites.getSiteById(site.siteId) %}
+                        <div class="field">
+                            <div class="btngroup flex">
+                                <div>
+                                    <a href="{{ actionUrl('deepl/translation/index', {'entry': entry.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id, 'translate': 0}) }}"
+                                       class="btn ">
+                                        {% if craft.app.getPlugins().getPlugin('deepl').getSettings().translateAcrossSiteGroups %}
+                                            {{ "From {locale}"|t('deepl', { locale: site.name ~ ' ' ~'(' ~ site.locale.getDisplayName(currentUser.preferences.language) ~ ')' }) }}
+                                        {% else %}
+                                            {{ "From {locale}"|t('deepl', { locale: site.locale.getDisplayName(currentUser.preferences.language) }) }}
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </fieldset>
+    {% endif %}
 {% endif %}

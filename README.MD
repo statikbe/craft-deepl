@@ -1,4 +1,4 @@
-# DeepL integration for Craft CMS 4 
+# DeepL integration for Craft CMS
 
 The goal of this plugin is to let <a href="https://www.deepl.com/" target="_blank" rel="noopener">DeepL</a> handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
 
@@ -54,6 +54,42 @@ composer require statikbe/craft-deepl
 # tell Craft to install the plugin
 php craft install/plugin deepl
 ```
+
+## Glossaries
+You can add glossaries for certain language pairs to aid translation of jargon or sector specific terms.
+This can be done through the ``deepl.php`` config file, like the example bellow:
+
+````php
+<?php
+
+return [
+    'glossaries' => [
+        [
+            'name' => 'Glossary 1',
+            'source' => 'nl',
+            'target' => 'fr',
+            'entries' => [
+                "Word NL" => "Word FR",
+            ]
+        ]
+    ]
+];
+````
+
+Note that DeepL does not support country specific language variants here. So you can not create a glossary to transate from ``nl-BE`` to ``nl-NL``.
+
+### Creating a glossary
+Once you have you config file, run the sync command on command line to add your glossaries to DeepL. You can run this in production or locally - as long as your using the same API key in both places
+````bash
+php craft deepl/glossary/sync
+````
+
+### Updating a glossary
+If you have the make changes to the glossary at the later point in time, simply run the sync command again and the plug-in will replace the glossary you previously created with the new one.
+
+## Copy content (1.5.0 and later)
+If you simply want to copy content from another entry, without translating, you can enable the "Copy content" setting and a new set of buttons will appear.
+Not that this runs through the same and thus it is limited to the same supported fields as the translate function.
 
 ## Supported Fields
 The plugin currently supports (for either translation or for copying values)
