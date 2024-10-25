@@ -11,7 +11,7 @@ use statikbe\deepl\Deepl;
 
 class ckeditor extends Component
 {
-    public function Field(\craft\ckeditor\Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
+    public function Field(\craft\ckeditor\Field $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
@@ -25,7 +25,8 @@ class ckeditor extends Component
         return Deepl::getInstance()->api->translateString(
             $sourceEntry->getFieldValue($field->handle)->getParsedContent(),
             $sourceSite->language,
-            $targetSite->language
+            $targetSite->language,
+            $translate
         );
     }
 }

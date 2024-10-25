@@ -16,7 +16,7 @@ class MapperService extends Component
     {
     }
 
-    public function entryMapper(Element $sourceEntry, Element $targetEntry)
+    public function entryMapper(Element $sourceEntry, Element $targetEntry, bool $translate = true)
     {
         $sourceSite = Craft::$app->getSites()->getSiteById($sourceEntry->siteId);
         $targetSite = Craft::$app->getSites()->getSiteById($targetEntry->siteId);
@@ -39,7 +39,9 @@ class MapperService extends Component
                         $field,
                         $sourceEntry,
                         $sourceSite,
-                        $targetSite
+                        $targetSite,
+                        $targetEntry,
+                        $translate,
                     );
                     $values[$field['handle']] = $translation;
                 }

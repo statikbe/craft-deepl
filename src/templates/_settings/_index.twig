@@ -11,6 +11,14 @@
     value: settings.apiKey,
 }) }}
 
+ {{ forms.lightswitchField({
+     label:        'Allow content to be translated across sitegroups'|t('deepl'),
+     instructions: "Use this when your content isn\'t, or isn\'t only, grouped per sitegroup"|t('deepl'),
+     id:           'translateAcrossSiteGroups',
+     name:         'translateAcrossSiteGroups',
+     on:           settings.translateAcrossSiteGroups,
+ }) }}
+
 
  {{ forms.lightswitchField({
      label:        'Translate slugs'|t('deepl'),
@@ -26,3 +34,11 @@
      name:         'primarySiteTranslation',
      on:           settings.primarySiteTranslation,
  }) }}
+
+{{ forms.lightswitchField({
+    label:        'Enable the "Copy content" feature'|t('deepl'),
+    instructions: 'This skips translation and simply copies all values to a draft - note that this still runs through the same code so is bound to the same supported fields as the translate function'|t('deepl'),
+    id:           'copyContent',
+    name:         'copyContent',
+    on:           settings.copyContent,
+}) }}

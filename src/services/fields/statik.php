@@ -19,7 +19,7 @@ class statik extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function AnchorLink(AnchorLink $field, Element $sourceEntry, Site $sourceSite, Site $targetSite): string|bool
+    public function AnchorLink(AnchorLink $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true): string|bool
     {
         $content = $sourceEntry->getFieldValue($field->handle);
 
@@ -34,7 +34,8 @@ class statik extends Component
         return Deepl::getInstance()->api->translateString(
             $sourceEntry->getFieldValue($field->handle),
             $sourceSite->language,
-            $targetSite->language
+            $targetSite->language,
+            $translate
         );
     }
 }
