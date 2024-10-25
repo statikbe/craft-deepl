@@ -1,4 +1,4 @@
-# DeepL integration for Craft CMS 4 
+# DeepL integration for Craft CMS
 
 The goal of this plugin is to let <a href="https://www.deepl.com/" target="_blank" rel="noopener">DeepL</a> handle 95% of the translation work, after which you can review the content and change it to your own tone of voice and specific industry jargon.
 

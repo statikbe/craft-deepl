@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.0 - 2024-10-25
+### Added
+- Stable release for Craft 5
+- Added support for DeepL Glossaries
+- Added copy function
+
 ## 5.0.0-alpha.5 - 2024-07-30
 ### Fixed
 - Fixed error on null values with Position field.
-
 
 ## 5.0.0-alpha.4 - 2024-05-30
 ### Fixed
