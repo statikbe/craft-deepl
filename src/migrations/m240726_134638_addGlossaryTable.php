@@ -2,7 +2,6 @@
 
 namespace statikbe\deepl\migrations;
 
-use Craft;
 use craft\db\Migration;
 use statikbe\deepl\records\GlossaryRecord;
 
@@ -22,7 +21,7 @@ class m240726_134638_addGlossaryTable extends Migration
             'source' => $this->string()->notNull(),
             'target' => $this->string()->notNull(),
             'dateCreated' => $this->dateTime()->notNull(),
-            'uid' => $this->uid()->notNull()
+            'uid' => $this->uid()->notNull(),
         ]);
 
         return true;

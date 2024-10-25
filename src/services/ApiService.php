@@ -34,7 +34,6 @@ class ApiService extends Component
             $this->parseLanguage($model->target),
             $entries
         );
-
     }
 
     public function getAllGlossaries()

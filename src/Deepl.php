@@ -65,7 +65,7 @@ class Deepl extends Plugin
             Event::on(
                 Entry::class,
                 Entry::EVENT_DEFINE_SIDEBAR_HTML,
-                function (DefineHtmlEvent $event) {
+                function(DefineHtmlEvent $event) {
                     /** @var Entry $entry */
                     $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_entries',
                         ["entry" => $event->sender, "settings" => $this->getSettings()]);
@@ -76,7 +76,7 @@ class Deepl extends Plugin
             Event::on(
                 Asset::class,
                 Asset::EVENT_DEFINE_SIDEBAR_HTML,
-                function (DefineHtmlEvent $event) {
+                function(DefineHtmlEvent $event) {
                     /** @var Asset $asset */
                     $template = Craft::$app->getView()->renderTemplate('deepl/_cp/_assets',
                         ["asset" => $event->sender, "settings" => $this->getSettings()]);

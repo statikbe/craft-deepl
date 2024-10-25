@@ -19,6 +19,5 @@ class configvaluesfield extends Component
 
         $content = $sourceEntry->getFieldValue($field->handle);
         return Json::decodeIfJson($content);
-
     }
 }

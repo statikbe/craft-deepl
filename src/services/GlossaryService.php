@@ -2,19 +2,13 @@
 
 namespace statikbe\deepl\services;
 
-use Craft;
 use craft\base\Component;
-use craft\base\Element;
-use craft\elements\db\ElementQuery;
-use craft\errors\InvalidFieldException;
 use statikbe\deepl\Deepl;
 use statikbe\deepl\models\GlossaryModel;
 use statikbe\deepl\records\GlossaryRecord;
-use yii\log\Logger;
 
 class GlossaryService extends Component
 {
-
     /**
      * Gets all glossary settings from the deepl.php config file
      * @return array
@@ -42,7 +36,7 @@ class GlossaryService extends Component
     public function getGlossaryForLanguages(string $source, string $target)
     {
         $record = GlossaryRecord::find()->andWhere(['source' => $source, 'target' => $target])->one();
-        if($record) {
+        if ($record) {
             return $record->uid;
         }
 
@@ -71,5 +65,4 @@ class GlossaryService extends Component
         $record->uid = $glossary->glossaryId;
         $record->save();
     }
-
 }
