@@ -19,6 +19,14 @@ class hyper extends Component
         $model = $targetEntry->getFieldValue($field->handle);
 
         $links = $model->getLinks();
+
+        if (!$links) {
+            /** @var LinkCollection $model */
+            $model = $sourceEntry->getFieldValue($field->handle);
+
+            $links = $model->getLinks();
+        }
+
         $newLinks = [];
         /** @var \verbb\hyper\base\Link $link */
         foreach ($links as $link) {
