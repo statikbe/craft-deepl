@@ -9,6 +9,7 @@ use craft\elements\MatrixBlock;
 use craft\errors\InvalidFieldException;
 use craft\fields\Matrix;
 use craft\fields\PlainText;
+use craft\fields\Table;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 
@@ -22,7 +23,7 @@ class fields extends Component
      * @return false|string
      * @throws \craft\errors\InvalidFieldException
      */
-    public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite,Element $targetEntry, $translate = true)
+    public function PlainText(PlainText $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
     {
         $content = $sourceEntry->getFieldValue($field->handle);
         if ($field->translationMethod === BaseField::TRANSLATION_METHOD_NONE && $content) {
@@ -39,6 +40,35 @@ class fields extends Component
             $targetSite->language,
             $translate
         );
+    }
+
+
+    public function Table(Table $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
+    {
+        $data = $sourceEntry->getFieldValue($field->handle);
+        $cols = collect($field->columns);
+
+        foreach ($cols->toArray() as $key => $col) {
+            $cols[$col['handle']] = $col;
+        }
+
+        $newData = [];
+        foreach ($data as $key => $row) {
+            foreach ($row as $rowKey => $cell) {
+                if (in_array($cols[$rowKey]['type'], ['singleline', 'multiline'])) {
+                    $newData[$key][$rowKey] = Deepl::getInstance()->api->translateString(
+                        $cell,
+                        $sourceSite->language,
+                        $targetSite->language,
+                        $translate
+                    );
+                } else {
+                    $newData[$key][$rowKey] = $cell;
+                }
+            }
+        }
+
+        return $newData;
     }
 
     /**
