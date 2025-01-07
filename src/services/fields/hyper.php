@@ -2,21 +2,29 @@
 
 namespace statikbe\deepl\services\fields;
 
-use Composer\Package\Link;
 use craft\base\Component;
 use craft\base\Element;
+use craft\errors\InvalidFieldException;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 use verbb\hyper\fields\HyperField;
+use verbb\hyper\links\Url;
 use verbb\hyper\models\LinkCollection;
+use verbb\hyper\links\Entry;
 
 class hyper extends Component
 {
-    public function HyperField(HyperField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, $translate = true, Element $targetEntry)
+    public function HyperField(
+        HyperField $field,
+        Element    $sourceElement,
+        Site       $sourceSite,
+        Site       $targetSite,
+        bool       $translate = true,
+        Element    $targetEntry
+    )
     {
-
         /** @var LinkCollection $model */
-        $model = $targetEntry->getFieldValue($field->handle);
+        $model = $sourceElement->getFieldValue($field->handle);
 
         $links = $model->getLinks();
 
@@ -30,19 +38,55 @@ class hyper extends Component
         $newLinks = [];
         /** @var \verbb\hyper\base\Link $link */
         foreach ($links as $link) {
-            if ($link->linkText) {
-                $translation = Deepl::getInstance()->api->translateString(
-                    $link->linkText,
-                    $sourceSite->language,
-                    $targetSite->language,
-                    $translate
-                );
-                $link->linkText = $translation;
-            }
-            $newLinks[] = $link;
-        }
-        $model->setLinks($newLinks);
+            $class = get_class($link);
+            $value = \Craft::createObject($class);
 
-        return $model;
+            if ($link instanceof Entry) {
+                $value->linkSiteId = $targetSite->id;
+            }
+
+
+            $value->linkValue = $link->linkValue;
+
+            $translation = Deepl::getInstance()->api->translateString(
+                $link->linkText,
+                $sourceSite->language,
+                $targetSite->language,
+                $translate
+            );
+
+            $value->setAttributes($link->getAttributes());
+
+            $newValues = [];
+            foreach ($link->getCustomFields() as $customField) {
+                try {
+                    $fieldData = Deepl::getInstance()->mapper->isFieldSupported($customField);
+                    if ($fieldData) {
+                        $fieldProvider = $fieldData[0];
+                        $fieldType = $fieldData[1];
+                        $translation = Deepl::getInstance()->$fieldProvider->$fieldType(
+                            $customField,
+                            $link,
+                            $sourceSite,
+                            $targetSite,
+                            $translate,
+                            $targetEntry
+                        );
+                        $newValues[$customField->handle] = $translation;
+                    }
+                } catch (InvalidFieldException $e) {
+                    $newValues[$customField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $customField->handle);
+                    \Craft::error("Hyper - Fieldtype not supported: " . get_class($field), __CLASS__);
+                }
+            }
+
+            $value->fields = $newValues;
+            $value->linkText = $translation;
+
+            $newLinks[] = $value;
+        }
+
+        return $newLinks;
+
     }
 }
