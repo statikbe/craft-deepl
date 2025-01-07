@@ -28,13 +28,6 @@ class hyper extends Component
 
         $links = $model->getLinks();
 
-        if (!$links) {
-            /** @var LinkCollection $model */
-            $model = $sourceEntry->getFieldValue($field->handle);
-
-            $links = $model->getLinks();
-        }
-
         $newLinks = [];
         /** @var \verbb\hyper\base\Link $link */
         foreach ($links as $link) {
@@ -48,14 +41,6 @@ class hyper extends Component
 
             $value->linkValue = $link->linkValue;
 
-            $translation = Deepl::getInstance()->api->translateString(
-                $link->linkText,
-                $sourceSite->language,
-                $targetSite->language,
-                $translate
-            );
-
-            $value->setAttributes($link->getAttributes());
 
             $newValues = [];
             foreach ($link->getCustomFields() as $customField) {
@@ -75,12 +60,20 @@ class hyper extends Component
                         $newValues[$customField->handle] = $translation;
                     }
                 } catch (InvalidFieldException $e) {
-                    $newValues[$customField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($block, $customField->handle);
+                    $newValues[$customField->handle] = Deepl::getInstance()->mapper->handleUnsupportedField($link, $customField->handle);
                     \Craft::error("Hyper - Fieldtype not supported: " . get_class($field), __CLASS__);
                 }
             }
 
+            $translation = Deepl::getInstance()->api->translateString(
+                $link->linkText,
+                $sourceSite->language,
+                $targetSite->language,
+                $translate
+            );
+
             $value->fields = $newValues;
+            $value->setAttributes($link->getAttributes());
             $value->linkText = $translation;
 
             $newLinks[] = $value;
