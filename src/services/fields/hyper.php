@@ -11,10 +11,10 @@ use verbb\hyper\models\LinkCollection;
 
 class hyper extends Component
 {
-    public function HyperField(HyperField $field, Element $sourceEntry, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
+    public function HyperField(HyperField $field, Element $sourceElement, Site $sourceSite, Site $targetSite, Element $targetEntry, $translate = true)
     {
         /** @var LinkCollection $model */
-        $model = $targetEntry->getFieldValue($field->handle);
+        $model = $sourceElement->getFieldValue($field->handle);
 
         $links = $model->getLinks();
         $newLinks = [];
