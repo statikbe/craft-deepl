@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.5.9 - 2025-05-27
+### Fixed
+- Fix link copy accros sites
+
 ## 1.5.8 - 2025-01-07
 ### Fixed
 - Fixed Hyper element translations
@@ -70,4 +74,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## 1.0.0 - 2023-01-04
 ### Added
-- Initial release! 🎉 
+- Initial release! 🎉

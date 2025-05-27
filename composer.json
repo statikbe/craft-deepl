@@ -1,66 +1,66 @@
 {
-    "name": "statikbe/craft-deepl", 
-    "description": "DeepL integration for Craft CMS",
-    "type": "craft-plugin",
-    "version": "1.5.8",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "craft-plugin",
-        "translate",
-        "deepl"
-    ],
-    "support": {
-        "docs": "https://github.com/statikbe/craft-deepl/blob/main/README.md",
-        "issues": "https://github.com/statikbe/craft-deepl/issues",
-        "source": "https://github.com/statikbe/craft-deepl"
+  "name": "statikbe/craft-deepl",
+  "description": "DeepL integration for Craft CMS",
+  "type": "craft-plugin",
+  "version": "1.5.9",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "translate",
+    "deepl"
+  ],
+  "support": {
+    "docs": "https://github.com/statikbe/craft-deepl/blob/main/README.md",
+    "issues": "https://github.com/statikbe/craft-deepl/issues",
+    "source": "https://github.com/statikbe/craft-deepl"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Statik",
+      "homepage": "https://www.statik.be"
     },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Statik",
-            "homepage": "https://www.statik.be"
-        },
-        {
-            "name": "Jan Henckens",
-            "email": "jan@statik.be"
-        },
-        {
-            "name": "Hannah De Wachter",
-            "email": "hannah@statik.be"
-        }
-    ],
-    "require": {
-        "craftcms/cms": "^4.0.0",
-        "deeplcom/deepl-php": "^v1.8.0"
+    {
+      "name": "Jan Henckens",
+      "email": "jan@statik.be"
     },
-    "require-dev": {
-        "craftcms/ecs": "dev-main",
-        "craftcms/phpstan": "dev-main"
-    },
-    "scripts": {
-        "check-cs": "ecs check --ansi",
-        "fix-cs": "ecs check --ansi --fix",
-        "phpstan": "phpstan --memory-limit=1G"
-    },
-    "autoload": {
-        "psr-4": {
-          "statikbe\\deepl\\": "src/"
-        }
-    },
-    "extra": {
-        "name": "DeepL",
-        "handle": "deepl",
-        "schemaVersion": "1.0.0",
-        "hasSettings": true,
-        "developer": "Statik",
-        "class": "statikbe\\deepl\\Deepl"
-    },
-    "config": {
-        "allow-plugins": {
-            "yiisoft/yii2-composer": true,
-            "craftcms/plugin-installer": true
-        }
+    {
+      "name": "Hannah De Wachter",
+      "email": "hannah@statik.be"
     }
+  ],
+  "require": {
+    "craftcms/cms": "^4.0.0",
+    "deeplcom/deepl-php": "^v1.8.0"
+  },
+  "require-dev": {
+    "craftcms/ecs": "dev-main",
+    "craftcms/phpstan": "dev-main"
+  },
+  "scripts": {
+    "check-cs": "ecs check --ansi",
+    "fix-cs": "ecs check --ansi --fix",
+    "phpstan": "phpstan --memory-limit=1G"
+  },
+  "autoload": {
+    "psr-4": {
+      "statikbe\\deepl\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "DeepL",
+    "handle": "deepl",
+    "schemaVersion": "1.0.0",
+    "hasSettings": true,
+    "developer": "Statik",
+    "class": "statikbe\\deepl\\Deepl"
+  },
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true,
+      "craftcms/plugin-installer": true
+    }
+  }
 }
