@@ -57,7 +57,7 @@ class MapperService extends Component
     public function handleUnsupportedField(Element $element, string $handle)
     {
         if ($element->getFieldValue($handle) instanceof ElementQuery) {
-            return $element->getFieldValue($handle)->anyStatus()->ids();
+            return $element->getFieldValue($handle)->site('*')->anyStatus()->ids();
         }
         return $element->getFieldValue($handle);
     }

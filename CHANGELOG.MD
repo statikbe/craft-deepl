@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.3 - 2025-06-11
+### Fixed
+- Fixed some minor styling issues in the latest Craft version ([#25](https://github.com/statikbe/craft-deepl/issues/25))
+
 ## 5.0.2 - 2025-01-30
 ### Fixed
 - Hyper: use source element instead of target
