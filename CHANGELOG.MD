@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.4 - 2026-03-26
+### Fixed
+- Fixed an error that happened with strings containing ampersands. ([#29](https://github.com/statikbe/craft-deepl/issues/29))
+
 ## 5.0.3 - 2025-06-11
 ### Fixed
 - Fixed some minor styling issues in the latest Craft version ([#25](https://github.com/statikbe/craft-deepl/issues/25))

@@ -70,7 +70,7 @@ class ApiService extends Component
             return $text;
         }
 
-        $options = ["tag_handling" => "xml"];
+        $options = ["tag_handling" => "html", "ignore_tags" => ["ignore"]];
 
         $glossary = Deepl::getInstance()->glossary->getGlossaryForLanguages($sourceLang, $targetLang);
 
@@ -78,14 +78,21 @@ class ApiService extends Component
             $options['glossary'] = $glossary;
         }
 
+        $encodedText = str_replace('&', '<ignore>&amp;</ignore>', $text);
+
         $translation = $this->translator->translateText(
-            $text,
+            $encodedText,
             $this->getLanguageString($sourceLang, false),
             $this->getLanguageString($targetLang, true),
             $options
         );
 
-        return $translation->text;
+        // First strip the ignore tags (whatever is inside them)
+        $result = preg_replace('/<ignore>.*?<\/ignore>/', '&', $translation->text);
+
+        // Clean up any leftover malformed entities DeepL might produce
+        $result = str_replace('&;', '&', $result);
+        return $result;
     }
 
     public function getTargetLanguages()
