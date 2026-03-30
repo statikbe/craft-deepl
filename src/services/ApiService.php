@@ -121,7 +121,11 @@ class ApiService extends Component
         // TODO: Better handling for support languages
         if ($lang === 'en') {
             if ($isTarget) {
-                return 'en-GB';
+                $str = strtoupper($string);
+                if (in_array($str, ['EN', 'EN-US', 'EN-GB'])) {
+                    return $str;
+                }
+                return 'EN-GB';
             } else {
                 return "EN";
             }
