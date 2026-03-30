@@ -39,13 +39,15 @@ class TranslationController extends Controller
 
             //TODO Handle different section propagation methods ?
 
-            $newTitle = Deepl::getInstance()->api->translateString(
-                $sourceEntry->title,
-                $sourceSite->language,
-                $destinationSite->language,
-                $translate
-            );
-            $targetEntry->title = $newTitle;
+            if ($sourceEntry->title) {
+                $newTitle = Deepl::getInstance()->api->translateString(
+                    $sourceEntry->title,
+                    $sourceSite->language,
+                    $destinationSite->language,
+                    $translate
+                );
+                $targetEntry->title = $newTitle;
+            }
 
             if ($settings->translateSlugs) {
                 $targetEntry->slug = "";
