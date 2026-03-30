@@ -92,6 +92,7 @@ class ApiService extends Component
 
         // Clean up any leftover malformed entities DeepL might produce
         $result = str_replace('&;', '&', $result);
+        $result = html_entity_decode($result, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         return $result;
     }
 
