@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.0.6 - 2026-03-30
+### Fixed
+- More robust check for &
+
+
 ## 5.0.5 - 2026-03-30
 ### Fixed
 - Fixed a regression where accents weren't encode for HTML
