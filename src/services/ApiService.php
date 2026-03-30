@@ -70,7 +70,7 @@ class ApiService extends Component
             return $text;
         }
 
-        $options = ["tag_handling" => "html", "ignore_tags" => ["ignore"]];
+        $options = ["tag_handling" => "html"];
 
         $glossary = Deepl::getInstance()->glossary->getGlossaryForLanguages($sourceLang, $targetLang);
 
@@ -78,7 +78,10 @@ class ApiService extends Component
             $options['glossary'] = $glossary;
         }
 
-        $encodedText = str_replace('&', '<ignore>&amp;</ignore>', $text);
+// Replace &amp; with a unique gibberish token before sending
+        $token = 'XQZJMP'; // meaningless to any language
+        $encodedText = str_replace('&amp;', '<span translate="no">' . $token . '</span>', $text);
+        $encodedText = preg_replace('/&(?!amp;|lt;|gt;|quot;|apos;)/', '<span translate="no">' . $token . '</span>', $encodedText);
 
         $translation = $this->translator->translateText(
             $encodedText,
@@ -87,12 +90,16 @@ class ApiService extends Component
             $options
         );
 
-        // First strip the ignore tags (whatever is inside them)
-        $result = preg_replace('/<ignore>.*?<\/ignore>/', '&', $translation->text);
+        $result = $translation->text;
 
-        // Clean up any leftover malformed entities DeepL might produce
-        $result = str_replace('&;', '&', $result);
+// Restore token with proper spacing
+        $result = preg_replace('/\s*<span translate="no">XQZJMP<\/span>\s*/', ' & ', $result);
+
+// Decode HTML entities DeepL adds (&#x27; = apostrophe etc.)
         $result = html_entity_decode($result, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        $result = trim($result);
+
         return $result;
     }
 
