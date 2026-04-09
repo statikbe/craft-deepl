@@ -31,12 +31,20 @@ class seomatic extends Component
             return "";
         }
 
+        // Seomatic returns an object with translated properties set directly,
+        // so we bypass batch mode and translate individually here.
+        $api = Deepl::getInstance()->api;
+        $wasBatching = $api->isBatchMode();
+        if ($wasBatching) {
+            $api->pauseBatch();
+        }
+
         $model = $metaBundle->metaGlobalVars;
 
         $data = $model->toArray();
         foreach ($data as $key => $value) {
             if ($value and !is_array($value)) {
-                $translation = Deepl::getInstance()->api->translateString(
+                $translation = $api->translateString(
                     $value,
                     $sourceSite->language,
                     $targetSite->language,
@@ -49,6 +57,10 @@ class seomatic extends Component
         }
 
         $metaBundle->metaGlobalVars = $data;
+
+        if ($wasBatching) {
+            $api->resumeBatch();
+        }
 
         return $metaBundle;
     }

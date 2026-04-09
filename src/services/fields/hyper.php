@@ -16,12 +16,20 @@ class hyper extends Component
         /** @var LinkCollection $model */
         $model = $sourceElement->getFieldValue($field->handle);
 
+        // Hyper returns an object with translated properties set directly,
+        // so we bypass batch mode and translate individually here.
+        $api = Deepl::getInstance()->api;
+        $wasBatching = $api->isBatchMode();
+        if ($wasBatching) {
+            $api->pauseBatch();
+        }
+
         $links = $model->getLinks();
         $newLinks = [];
         /** @var \verbb\hyper\base\Link $link */
         foreach ($links as $link) {
             if ($link->linkText) {
-                $translation = Deepl::getInstance()->api->translateString(
+                $translation = $api->translateString(
                     $link->linkText,
                     $sourceSite->language,
                     $targetSite->language,
@@ -32,6 +40,10 @@ class hyper extends Component
             $newLinks[] = $link;
         }
         $model->setLinks($newLinks);
+
+        if ($wasBatching) {
+            $api->resumeBatch();
+        }
 
         return $model;
     }

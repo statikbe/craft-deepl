@@ -117,7 +117,7 @@ class fields extends Component
                 }
             }
 
-            if (isset($data[$block->id]) && $data[$block->id] > 0) {
+            if (!empty($data[$block->id])) {
                 $data[$block->id]['type'] = $blockType->handle;
                 $data[$block->id]['enabled'] = true;
             }

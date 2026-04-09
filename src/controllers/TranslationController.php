@@ -17,36 +17,38 @@ class TranslationController extends Controller
 {
     public function actionIndex()
     {
-        // TODO: run check to see if we have an API key
         try {
             $settings = Deepl::getInstance()->getSettings();
             $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
             $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
             $destinationSiteId = Craft::$app->getRequest()->getRequiredQueryParam('destinationLocale');
 
-            $translate = Craft::$app->getRequest()->getQueryParam('translate', 1);
+            $translate = (bool) Craft::$app->getRequest()->getQueryParam('translate', 1);
 
             $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
             $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
 
-
             $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
             $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
 
-//            if(!$sourceEntry || !$targetEntry) {
-//                throw new InvalidConfigException("Translated entry not found", Deepl::class);
-//            }
+            if (!$sourceEntry || !$targetEntry) {
+                return $this->returnError();
+            }
 
-            //TODO Handle different section propagation methods ?
+            $api = Deepl::getInstance()->api;
+
+            // Start batch mode to collect all strings and translate in one API call
+            if ($translate) {
+                $api->startBatch();
+            }
 
             if ($sourceEntry->title) {
-                $newTitle = Deepl::getInstance()->api->translateString(
+                $targetEntry->title = $api->translateString(
                     $sourceEntry->title,
                     $sourceSite->language,
                     $destinationSite->language,
                     $translate
                 );
-                $targetEntry->title = $newTitle;
             }
 
             if ($settings->translateSlugs) {
@@ -56,6 +58,17 @@ class TranslationController extends Controller
             }
 
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry, $translate);
+
+            // Flush batch: send all collected strings to DeepL in one API call
+            if ($translate) {
+                $map = $api->flushBatch($sourceSite->language, $destinationSite->language);
+
+                if ($sourceEntry->title && isset($map[$targetEntry->title])) {
+                    $targetEntry->title = $map[$targetEntry->title];
+                }
+
+                $newValues = $api->resolveTranslations($newValues, $map);
+            }
 
             // Save the translated version of the entry as a new draft
             /** @var Element|DraftBehavior $element */
@@ -68,20 +81,22 @@ class TranslationController extends Controller
             $draft->setCanonical($targetEntry);
             $draft->setScenario(Element::SCENARIO_ESSENTIALS);
             $draft->setFieldValues($newValues);
-        } catch (Exception $e) {
-            dd($e);
-            $this->returnError($sourceEntry);
+
+            if (!$draft->validate()) {
+                return $this->returnError($sourceEntry);
+            }
+
+            Craft::$app->getElements()->saveElement($draft);
+
+            return $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
+                'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
+            ]);
+        } catch (\Throwable $e) {
+            \Craft::error($e->getMessage(), 'deepl');
+            return $this->returnError($sourceEntry ?? null);
+        } finally {
+            Deepl::getInstance()->api->resetBatch();
         }
-
-        if (!$draft->validate()) {
-            $this->returnError($sourceEntry);
-        }
-
-        Craft::$app->getElements()->saveElement($draft);
-
-        return $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
-            'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
-        ]);
     }
 
     public function actionAssets()
@@ -129,10 +144,10 @@ class TranslationController extends Controller
     }
 
 
-    private function returnError(Entry $entry)
+    private function returnError(?Entry $entry = null)
     {
         return $this->asFailure("Couldn't create translation", [], [
-            'details' => !$entry->dateDeleted ? Cp::elementHtml($entry) : null,
+            'details' => $entry && !$entry->dateDeleted ? Cp::elementHtml($entry) : null,
         ]);
     }
 }

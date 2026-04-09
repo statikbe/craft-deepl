@@ -15,6 +15,10 @@ class ApiService extends Component
 {
     public Translator $translator;
 
+    private bool $batchMode = false;
+    private array $batchQueue = [];
+    private int $batchCounter = 0;
+
     public function init(): void
     {
         $authKey = App::parseEnv(Deepl::getInstance()->getSettings()->apiKey);
@@ -70,6 +74,20 @@ class ApiService extends Component
             return $text;
         }
 
+        if ($this->batchMode) {
+            $placeholder = '__DEEPL_' . $this->batchCounter . '__';
+            $token = 'XQZJMP';
+            $encodedText = str_replace('&amp;', '<span translate="no">' . $token . '</span>', $text);
+            $encodedText = preg_replace('/&(?!amp;|lt;|gt;|quot;|apos;)/', '<span translate="no">' . $token . '</span>', $encodedText);
+
+            $this->batchQueue[] = [
+                'encoded' => $encodedText,
+                'placeholder' => $placeholder,
+            ];
+            $this->batchCounter++;
+            return $placeholder;
+        }
+
         $options = ["tag_handling" => "html"];
 
         $glossary = Deepl::getInstance()->glossary->getGlossaryForLanguages($sourceLang, $targetLang);
@@ -101,6 +119,99 @@ class ApiService extends Component
         $result = trim($result);
 
         return $result;
+    }
+
+    public function startBatch(): void
+    {
+        $this->batchMode = true;
+        $this->batchQueue = [];
+        $this->batchCounter = 0;
+    }
+
+    public function isBatchMode(): bool
+    {
+        return $this->batchMode;
+    }
+
+    public function pauseBatch(): void
+    {
+        $this->batchMode = false;
+    }
+
+    public function resumeBatch(): void
+    {
+        $this->batchMode = true;
+    }
+
+    public function resetBatch(): void
+    {
+        $this->batchMode = false;
+        $this->batchQueue = [];
+        $this->batchCounter = 0;
+    }
+
+    /**
+     * Sends all queued translation strings to DeepL in batched API calls (max 50 per call)
+     * and returns a map of placeholder tokens to translated strings.
+     */
+    public function flushBatch(string $sourceLang, string $targetLang): array
+    {
+        $this->batchMode = false;
+
+        if (empty($this->batchQueue)) {
+            return [];
+        }
+
+        $options = ["tag_handling" => "html"];
+        $glossary = Deepl::getInstance()->glossary->getGlossaryForLanguages($sourceLang, $targetLang);
+        if ($glossary) {
+            $options['glossary'] = $glossary;
+        }
+
+        $map = [];
+        $chunks = array_chunk($this->batchQueue, 50);
+
+        foreach ($chunks as $chunk) {
+            $texts = array_column($chunk, 'encoded');
+
+            $results = $this->translator->translateText(
+                $texts,
+                $this->getLanguageString($sourceLang, false),
+                $this->getLanguageString($targetLang, true),
+                $options
+            );
+
+            foreach ($chunk as $i => $item) {
+                $result = $results[$i]->text;
+                $result = preg_replace('/\s*<span translate="no">XQZJMP<\/span>\s*/', ' & ', $result);
+                $result = html_entity_decode($result, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $result = trim($result);
+                $map[$item['placeholder']] = $result;
+            }
+        }
+
+        $this->batchQueue = [];
+        return $map;
+    }
+
+    /**
+     * Recursively replaces placeholder tokens in a nested array/string structure
+     * with their actual translations from the provided map.
+     */
+    public function resolveTranslations(mixed $values, array $map): mixed
+    {
+        if (is_string($values)) {
+            if (isset($map[$values])) {
+                return $map[$values];
+            }
+            return strtr($values, $map);
+        }
+        if (is_array($values)) {
+            foreach ($values as $key => $value) {
+                $values[$key] = $this->resolveTranslations($value, $map);
+            }
+        }
+        return $values;
     }
 
     public function getTargetLanguages()
