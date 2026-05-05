@@ -265,8 +265,9 @@ class ApiService extends Component
      *
      * Listeners may add `custom_instructions`, `context`, `formality`, or any
      * other key supported by `\DeepL\TranslateTextOptions`. Items added to
-     * `$event->customInstructions` are merged under `custom_instructions`
-     * and capped at 10 (DeepL's documented limit).
+     * `$event->customInstructions` are merged with any instructions already
+     * present in `$event->options[CUSTOM_INSTRUCTIONS]` and capped at 10
+     * (DeepL's documented limit).
      *
      * @param string|array<string> $text  The text(s) being translated — context only.
      * @param array<string, mixed> $options  The options array as built so far.
@@ -285,12 +286,15 @@ class ApiService extends Component
 
         $merged = $event->options;
 
-        if (!empty($event->customInstructions)) {
-            $merged[TranslateTextOptions::CUSTOM_INSTRUCTIONS] = array_slice(
-                array_values($event->customInstructions),
-                0,
-                10
-            );
+        $existing = $merged[TranslateTextOptions::CUSTOM_INSTRUCTIONS] ?? [];
+        if (!is_array($existing)) {
+            $existing = [$existing];
+        }
+
+        $instructions = array_merge(array_values($existing), array_values($event->customInstructions));
+
+        if (!empty($instructions)) {
+            $merged[TranslateTextOptions::CUSTOM_INSTRUCTIONS] = array_slice($instructions, 0, 10);
         }
 
         return $merged;
