@@ -266,8 +266,8 @@ class ApiService extends Component
      * Listeners may add `custom_instructions`, `context`, `formality`, or any
      * other key supported by `\DeepL\TranslateTextOptions`. Items added to
      * `$event->customInstructions` are merged with any instructions already
-     * present in `$event->options[CUSTOM_INSTRUCTIONS]` and capped at 10
-     * (DeepL's documented limit).
+     * present in `$event->options[TranslateTextOptions::CUSTOM_INSTRUCTIONS]`
+     * and capped at 10 (DeepL's documented limit).
      *
      * @param string|array<string> $text  The text(s) being translated — context only.
      * @param array<string, mixed> $options  The options array as built so far.
