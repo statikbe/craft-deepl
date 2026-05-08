@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 5.1.0 - 2026-06-08
 ### Added
 - New `ApiService::EVENT_BEFORE_TRANSLATE` event lets projects mutate the DeepL request options on a per-translation basis. Listeners receive a `ModifyTranslateOptionsEvent` and can inject [custom instructions](https://developers.deepl.com/docs/best-practices/custom-instructions), `context`, `formality`, `style_id` or any other [`TranslateTextOptions`](https://github.com/DeepLcom/deepl-php/blob/main/src/TranslateTextOptions.php) value. See README for an example.
 
