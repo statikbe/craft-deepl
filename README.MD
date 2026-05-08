@@ -111,6 +111,75 @@ The plugin currently supports (for either translation or for copying values)
 - nystudio107/craft-seomatic
 
 
+## Custom translation options (events)
+
+The plugin fires `ApiService::EVENT_BEFORE_TRANSLATE` right before each request to DeepL. Listeners receive a `ModifyTranslateOptionsEvent` and can mutate the options sent to the API — including DeepL's [custom instructions](https://developers.deepl.com/docs/best-practices/custom-instructions) (up to 10 directives, ≤300 chars each), `context`, `formality`, `style_id`, and any other [`TranslateTextOptions`](https://github.com/DeepLcom/deepl-php/blob/main/src/TranslateTextOptions.php) key.
+
+This is intentionally event-based rather than a CP setting: instructions tend to be project-specific (brand voice, jargon, sector tone), so they live in your project module instead of the plugin database.
+
+### Event payload
+
+| Property | Type | Mutable? | Notes |
+|---|---|---|---|
+| `sourceLang` | `string` | no | Source language as Craft passes it (`en`, `nl-BE`, …). |
+| `targetLang` | `string` | no | Target language. |
+| `text` | `string \| array<string>` | no | Provided for context. `array` when triggered from the batch flush. |
+| `options` | `array<string, mixed>` | yes | Full DeepL options bag — already contains `tag_handling` and (if matched) `glossary`. |
+| `customInstructions` | `array<int, string>` | yes | Convenience bucket. Merged into `options['custom_instructions']` and capped to 10. |
+
+### Basic example
+
+Register a listener in your project module's `init()`:
+
+````php
+use DeepL\TranslateTextOptions;
+use statikbe\deepl\events\ModifyTranslateOptionsEvent;
+use statikbe\deepl\services\ApiService;
+use yii\base\Event;
+
+Event::on(
+    ApiService::class,
+    ApiService::EVENT_BEFORE_TRANSLATE,
+    function (ModifyTranslateOptionsEvent $event) {
+        if ($event->targetLang === 'fr') {
+            $event->customInstructions[] = 'Use a friendly, informal tone (tutoiement).';
+            $event->customInstructions[] = 'Translate brand names literally; do not localize.';
+        }
+
+        // Or set any other DeepL option directly:
+        $event->options[TranslateTextOptions::FORMALITY] = 'less';
+    }
+);
+````
+
+### Branching on the current entry
+
+The event itself is per-translation, not per-entry, but you can read the controller request to scope rules to a section or entry type:
+
+````php
+Event::on(
+    ApiService::class,
+    ApiService::EVENT_BEFORE_TRANSLATE,
+    function (ModifyTranslateOptionsEvent $event) {
+        $entryId = Craft::$app->getRequest()->getParam('entryId');
+        $entry = $entryId ? Craft::$app->getEntries()->getEntryById((int) $entryId) : null;
+
+        if ($entry?->section?->handle === 'legal') {
+            $event->customInstructions[] = 'Preserve all legal terminology verbatim; do not paraphrase.';
+            $event->options[TranslateTextOptions::FORMALITY] = 'more';
+        }
+    }
+);
+````
+
+### Notes & limits
+
+- DeepL caps custom instructions at **10 per request, 300 chars each**. The plugin enforces the count cap; it does not truncate per-instruction length — DeepL will return an error if you exceed it.
+- Setting `custom_instructions` automatically routes to DeepL's `quality_optimized` model. Do **not** combine it with `model_type: latency_optimized`.
+- Custom instructions only support these target languages: `de`, `en`, `es`, `fr`, `it`, `ja`, `ko`, `zh` (and variants).
+- `custom_instructions` is supported on text translation only, not the `/document` endpoint.
+- Phrasing matters — the [DeepL guidance](https://developers.deepl.com/docs/best-practices/custom-instructions) recommends positive, single-rule directives ("Use a formal tone") over negatives or compound rules.
+
 ## Roadmap
 
 - [ ] Support for different propagation methods for sections

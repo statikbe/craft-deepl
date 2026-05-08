@@ -7,12 +7,16 @@ use craft\helpers\App;
 use DeepL\DeepLException;
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
+use DeepL\TranslateTextOptions;
 use DeepL\Translator;
 use statikbe\deepl\Deepl;
+use statikbe\deepl\events\ModifyTranslateOptionsEvent;
 use statikbe\deepl\models\GlossaryModel;
 
 class ApiService extends Component
 {
+    public const EVENT_BEFORE_TRANSLATE = 'beforeTranslate';
+
     public Translator $translator;
 
     private bool $batchMode = false;
@@ -101,6 +105,8 @@ class ApiService extends Component
         $encodedText = str_replace('&amp;', '<span translate="no">' . $token . '</span>', $text);
         $encodedText = preg_replace('/&(?!amp;|lt;|gt;|quot;|apos;)/', '<span translate="no">' . $token . '</span>', $encodedText);
 
+        $options = $this->triggerBeforeTranslate($sourceLang, $targetLang, $encodedText, $options);
+
         $translation = $this->translator->translateText(
             $encodedText,
             $this->getLanguageString($sourceLang, false),
@@ -174,11 +180,13 @@ class ApiService extends Component
         foreach ($chunks as $chunk) {
             $texts = array_column($chunk, 'encoded');
 
+            $chunkOptions = $this->triggerBeforeTranslate($sourceLang, $targetLang, $texts, $options);
+
             $results = $this->translator->translateText(
                 $texts,
                 $this->getLanguageString($sourceLang, false),
                 $this->getLanguageString($targetLang, true),
-                $options
+                $chunkOptions
             );
 
             foreach ($chunk as $i => $item) {
@@ -249,5 +257,46 @@ class ApiService extends Component
     {
         $data = str_split($language, '2');
         return $data[0];
+    }
+
+    /**
+     * Fires {@see self::EVENT_BEFORE_TRANSLATE} and returns the (possibly
+     * mutated) options array to send to DeepL.
+     *
+     * Listeners may add `custom_instructions`, `context`, `formality`, or any
+     * other key supported by `\DeepL\TranslateTextOptions`. Items added to
+     * `$event->customInstructions` are merged with any instructions already
+     * present in `$event->options[TranslateTextOptions::CUSTOM_INSTRUCTIONS]`
+     * and capped at 10 (DeepL's documented limit).
+     *
+     * @param string|array<string> $text  The text(s) being translated — context only.
+     * @param array<string, mixed> $options  The options array as built so far.
+     * @return array<string, mixed>
+     */
+    private function triggerBeforeTranslate(string $sourceLang, string $targetLang, string|array $text, array $options): array
+    {
+        $event = new ModifyTranslateOptionsEvent([
+            'sourceLang' => $sourceLang,
+            'targetLang' => $targetLang,
+            'text' => $text,
+            'options' => $options,
+        ]);
+
+        $this->trigger(self::EVENT_BEFORE_TRANSLATE, $event);
+
+        $merged = $event->options;
+
+        $existing = $merged[TranslateTextOptions::CUSTOM_INSTRUCTIONS] ?? [];
+        if (!is_array($existing)) {
+            $existing = [$existing];
+        }
+
+        $instructions = array_merge(array_values($existing), array_values($event->customInstructions));
+
+        if (!empty($instructions)) {
+            $merged[TranslateTextOptions::CUSTOM_INSTRUCTIONS] = array_slice($instructions, 0, 10);
+        }
+
+        return $merged;
     }
 }
