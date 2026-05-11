@@ -2,7 +2,7 @@
     "name": "statikbe/craft-deepl", 
     "description": "DeepL integration for Craft CMS",
     "type": "craft-plugin",
-    "version": "5.1.0",
+    "version": "5.1.1",
     "keywords": [
         "craft",
         "cms",
