@@ -123,6 +123,8 @@ This is intentionally event-based rather than a CP setting: instructions tend to
 |---|---|---|---|
 | `sourceLang` | `string` | no | Source language as Craft passes it (`en`, `nl-BE`, …). |
 | `targetLang` | `string` | no | Target language. |
+| `sourceSite` | `?craft\models\Site` | no | Source Craft site when the caller set it (the CP translate controllers do). May be `null` for ad-hoc string translation. |
+| `targetSite` | `?craft\models\Site` | no | Destination Craft site. Branch on `$event->targetSite?->handle` to apply per-site rules. |
 | `text` | `string \| array<string>` | no | Provided for context. `array` when triggered from the batch flush. |
 | `options` | `array<string, mixed>` | yes | Full DeepL options bag — already contains `tag_handling` and (if matched) `glossary`. |
 | `customInstructions` | `array<int, string>` | yes | Convenience bucket. Merged into `options['custom_instructions']` and capped to 10. |
@@ -148,6 +150,24 @@ Event::on(
 
         // Or set any other DeepL option directly:
         $event->options[TranslateTextOptions::FORMALITY] = 'less';
+    }
+);
+````
+
+### Branching on the destination site
+
+`$event->targetSite` lets you apply different instructions per Craft site:
+
+````php
+Event::on(
+    ApiService::class,
+    ApiService::EVENT_BEFORE_TRANSLATE,
+    function (ModifyTranslateOptionsEvent $event) {
+        match ($event->targetSite?->handle) {
+            'belgiumFr' => $event->customInstructions[] = 'Use Belgian-French terminology (mutuelle, numéro national).',
+            'franceFr'  => $event->customInstructions[] = 'Use Metropolitan French terminology (sécurité sociale).',
+            default     => null,
+        };
     }
 );
 ````

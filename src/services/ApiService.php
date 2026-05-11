@@ -4,6 +4,7 @@ namespace statikbe\deepl\services;
 
 use craft\base\Component;
 use craft\helpers\App;
+use craft\models\Site;
 use DeepL\DeepLException;
 use DeepL\GlossaryEntries;
 use DeepL\GlossaryInfo;
@@ -22,6 +23,8 @@ class ApiService extends Component
     private bool $batchMode = false;
     private array $batchQueue = [];
     private int $batchCounter = 0;
+    private ?Site $sourceSite = null;
+    private ?Site $targetSite = null;
 
     public function init(): void
     {
@@ -154,6 +157,19 @@ class ApiService extends Component
         $this->batchMode = false;
         $this->batchQueue = [];
         $this->batchCounter = 0;
+        $this->sourceSite = null;
+        $this->targetSite = null;
+    }
+
+    /**
+     * Sets the Craft sites involved in the current translation flow. Both are
+     * surfaced on `ModifyTranslateOptionsEvent` so listeners can branch on the
+     * destination site (e.g. per-site custom instructions).
+     */
+    public function setSiteContext(?Site $sourceSite, ?Site $targetSite): void
+    {
+        $this->sourceSite = $sourceSite;
+        $this->targetSite = $targetSite;
     }
 
     /**
@@ -278,6 +294,8 @@ class ApiService extends Component
         $event = new ModifyTranslateOptionsEvent([
             'sourceLang' => $sourceLang,
             'targetLang' => $targetLang,
+            'sourceSite' => $this->sourceSite,
+            'targetSite' => $this->targetSite,
             'text' => $text,
             'options' => $options,
         ]);

@@ -36,6 +36,7 @@ class TranslationController extends Controller
             }
 
             $api = Deepl::getInstance()->api;
+            $api->setSiteContext($sourceSite, $destinationSite);
 
             // Start batch mode to collect all strings and translate in one API call
             if ($translate) {
@@ -115,6 +116,8 @@ class TranslationController extends Controller
             $targetEntry = Asset::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
 
             //TODO Handle different section propagation methods ?
+
+            Deepl::getInstance()->api->setSiteContext($sourceSite, $destinationSite);
 
             $newTitle = Deepl::getInstance()->api->translateString(
                 $sourceEntry->title,
