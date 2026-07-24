@@ -4,10 +4,12 @@ namespace statikbe\deepl\services\fields;
 
 use craft\base\Component;
 use craft\base\Element;
+use craft\elements\Entry;
 use craft\models\Site;
 use statikbe\deepl\Deepl;
 use verbb\hyper\fields\HyperField;
 use verbb\hyper\models\LinkCollection;
+use verbb\hyper\base\ElementLink;
 
 class hyper extends Component
 {
@@ -36,6 +38,12 @@ class hyper extends Component
                     $translate
                 );
                 $link->linkText = $translation;
+            }
+            if ($link instanceof ElementLink) {
+                $entryExists = Entry::find()->siteId($targetSite->id)->id($link->linkValue)->status(null)->one();
+                if ($entryExists) {
+                    $link->linkSiteId = $targetSite->id;
+                }
             }
             $newLinks[] = $link;
         }
