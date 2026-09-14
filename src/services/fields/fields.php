@@ -34,12 +34,39 @@ class fields extends Component
             return "";
         }
 
+        if ($this->containsScriptTag($content)) {
+            \Craft::info(
+                "Skipping field '{$field->handle}': contains a script tag, left untranslated",
+                __CLASS__
+            );
+
+            return $content;
+        }
+
         return Deepl::getInstance()->api->translateString(
             $sourceEntry->getFieldValue($field->handle),
             $sourceSite->language,
             $targetSite->language,
             $translate
         );
+    }
+
+
+    /**
+     * Markup carrying a script tag - third-party embeds such as Trustpilot, cookie widgets or
+     * tracking pixels - is code, not copy. Translating it is pointless and actively harmful: DeepL
+     * rewrites text inside attributes, and its HTML parser rejects the whole request on some
+     * snippets with "Tag handling parsing failed, please check input. 'text without parent'".
+     * Tag handling expects a single root element, while an embed is typically a comment, a script
+     * and a div side by side. That failure fails the entire entry, not just this field.
+     *
+     * Matched on content rather than on the field handle on purpose: these snippets turn up in
+     * fields named anything at all (embedContent, reviews, ...), so a naming convention is not
+     * something to rely on.
+     */
+    private function containsScriptTag(mixed $content): bool
+    {
+        return is_string($content) && preg_match('/<script\b/i', $content) === 1;
     }
 
 
