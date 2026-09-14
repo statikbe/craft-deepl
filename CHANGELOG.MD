@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.2 - 2026-09-14
+### Added
+- Fields with script tags would sometimes break the translation. Now those fields are skipped.
+
 ## 5.1.1 - 2026-06-11
 ### Added
 - `ModifyTranslateOptionsEvent` exposes `$sourceSite` and `$targetSite` (Craft `Site` models) so listeners can apply per-site rules. Set by the CP translation controllers via the new `ApiService::setSiteContext()` method.
