@@ -10,7 +10,6 @@ use craft\elements\Entry;
 use craft\helpers\Cp;
 use craft\web\Controller;
 use statikbe\deepl\Deepl;
-use yii\base\Exception;
 use yii\base\InvalidConfigException;
 
 class TranslationController extends Controller
@@ -96,7 +95,9 @@ class TranslationController extends Controller
             \Craft::error($e->getMessage(), 'deepl');
             return $this->returnError($sourceEntry ?? null);
         } finally {
-            Deepl::getInstance()->api->resetBatch();
+            if (isset($api)) {
+                $api->resetBatch();
+            }
         }
     }
 
@@ -131,12 +132,13 @@ class TranslationController extends Controller
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 
             $targetEntry->setFieldValues($newValues);
-        } catch (Exception $e) {
-            $this->returnError($sourceEntry);
+        } catch (\Throwable $e) {
+            \Craft::error($e->getMessage(), 'deepl');
+            return $this->returnError($sourceEntry ?? null);
         }
 
         if (!$targetEntry->validate()) {
-            $this->returnError($sourceEntry);
+            return $this->returnError($sourceEntry);
         }
 
         Craft::$app->getElements()->saveElement($targetEntry);
@@ -147,7 +149,7 @@ class TranslationController extends Controller
     }
 
 
-    private function returnError(?Entry $entry = null)
+    private function returnError(?Element $entry = null)
     {
         return $this->asFailure("Couldn't create translation", [], [
             'details' => $entry && !$entry->dateDeleted ? Cp::elementHtml($entry) : null,
