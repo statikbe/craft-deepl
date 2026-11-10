@@ -19,6 +19,9 @@ class TranslationController extends Controller
 {
     public function beforeAction($action): bool
     {
+        $this->requireCpRequest();
+        $this->requirePermission('accessCp');
+
         // The CP links are GET requests, so the CSRF token is passed in the query string
         $request = Craft::$app->getRequest();
         if (!$request->validateCsrfToken($request->getQueryParam($request->csrfParam))) {
