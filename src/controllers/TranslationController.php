@@ -12,9 +12,21 @@ use craft\web\Controller;
 use statikbe\deepl\Deepl;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
 
 class TranslationController extends Controller
 {
+    public function beforeAction($action): bool
+    {
+        // The CP links are GET requests, so the CSRF token is passed in the query string
+        $request = Craft::$app->getRequest();
+        if (!$request->validateCsrfToken($request->getQueryParam($request->csrfParam))) {
+            throw new BadRequestHttpException('Invalid CSRF token.');
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
         try {
