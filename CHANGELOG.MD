@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 5.1.3 - 2026-11-10 [CRITICAL]
+### Security
+- Fixed a missing authorization check in the translation controller actions.
+- Translation controller actions now require a valid CSRF token.
+
 ## 5.1.2 - 2026-09-14
 ### Added
 - Fields with script tags would sometimes break the translation. Now those fields are skipped.
