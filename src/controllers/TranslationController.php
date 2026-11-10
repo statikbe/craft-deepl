@@ -12,12 +12,27 @@ use craft\web\Controller;
 use statikbe\deepl\Deepl;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 
 class TranslationController extends Controller
 {
+    public function beforeAction($action): bool
+    {
+        $this->requireCpRequest();
+        $this->requirePermission('accessCp');
+
+        // The CP links are GET requests, so the CSRF token is passed in the query string
+        $request = Craft::$app->getRequest();
+        if (!$request->validateCsrfToken($request->getQueryParam($request->csrfParam))) {
+            throw new BadRequestHttpException('Invalid CSRF token.');
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
-        // TODO: run check to see if we have an API key
         try {
             $settings = Deepl::getInstance()->getSettings();
             $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
@@ -33,9 +48,14 @@ class TranslationController extends Controller
             $sourceEntry = Entry::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
             $targetEntry = Entry::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
 
-//            if(!$sourceEntry || !$targetEntry) {
-//                throw new InvalidConfigException("Translated entry not found", Deepl::class);
-//            }
+            if (!$sourceEntry || !$targetEntry) {
+                return $this->asFailure("Couldn't create translation");
+            }
+
+            $user = Craft::$app->getUser()->getIdentity();
+            if (!$sourceEntry->canView($user) || !Craft::$app->getElements()->canCreateDrafts($targetEntry, $user)) {
+                throw new ForbiddenHttpException('User not authorized to translate this entry.');
+            }
 
             //TODO Handle different section propagation methods ?
 
@@ -67,6 +87,8 @@ class TranslationController extends Controller
             $draft->setCanonical($targetEntry);
             $draft->setScenario(Element::SCENARIO_ESSENTIALS);
             $draft->setFieldValues($newValues);
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
         } catch (Exception $e) {
             $this->returnError($sourceEntry);
         }
@@ -84,7 +106,6 @@ class TranslationController extends Controller
 
     public function actionAssets()
     {
-        // TODO: run check to see if we have an API key
         try {
             $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
             $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
@@ -98,6 +119,15 @@ class TranslationController extends Controller
 
             $sourceEntry = Asset::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
             $targetEntry = Asset::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
+
+            if (!$sourceEntry || !$targetEntry) {
+                return $this->asFailure("Couldn't create translation");
+            }
+
+            $user = Craft::$app->getUser()->getIdentity();
+            if (!$sourceEntry->canView($user) || !$targetEntry->canSave($user)) {
+                throw new ForbiddenHttpException('User not authorized to translate this asset.');
+            }
 
             //TODO Handle different section propagation methods ?
 
@@ -114,6 +144,8 @@ class TranslationController extends Controller
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 
             $targetEntry->setFieldValues($newValues);
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
         } catch (Exception $e) {
             $this->returnError($sourceEntry);
         }

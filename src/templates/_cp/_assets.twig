@@ -29,7 +29,7 @@
                     <div class="field">
                         <div class="btngroup flex">
                             <div>
-                                <a href="{{ actionUrl('deepl/translation/assets', {'entry': asset.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id}) }}"
+                                <a href="{{ actionUrl('deepl/translation/assets', {'entry': asset.id, 'sourceLocale': site.id, 'destinationLocale': selectedSite.id, (craft.app.request.csrfParam): craft.app.request.csrfToken}) }}"
                                    class="btn ">
                                     {% if craft.app.getPlugins().getPlugin('deepl').getSettings().translateAcrossSiteGroups %}
                                         {{ "From {locale}"|t('deepl', { locale: site.name ~ ' ' ~'(' ~ site.locale.getDisplayName(currentUser.preferences.language) ~ ')' }) }}
