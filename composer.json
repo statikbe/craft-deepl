@@ -32,7 +32,7 @@
     }
   ],
   "require": {
-    "craftcms/cms": "^4.0.0",
+    "craftcms/cms": "^4.3.0",
     "deeplcom/deepl-php": "^v1.8.0"
   },
   "require-dev": {
