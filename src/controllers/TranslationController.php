@@ -13,6 +13,7 @@ use statikbe\deepl\Deepl;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 
 class TranslationController extends Controller
 {
@@ -45,6 +46,11 @@ class TranslationController extends Controller
 
             if (!$sourceEntry || !$targetEntry) {
                 return $this->returnError();
+            }
+
+            $user = Craft::$app->getUser()->getIdentity();
+            if (!$sourceEntry->canView($user) || !Craft::$app->getElements()->canCreateDrafts($targetEntry, $user)) {
+                throw new ForbiddenHttpException('User not authorized to translate this entry.');
             }
 
             $api = Deepl::getInstance()->api;
@@ -104,6 +110,8 @@ class TranslationController extends Controller
             return $this->asSuccess("Translation saved as draft", [], $draft->getCpEditUrl(), [
                 'details' => !$draft->dateDeleted ? Cp::elementHtml($draft) : null,
             ]);
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
         } catch (\Throwable $e) {
             \Craft::error($e->getMessage(), 'deepl');
             return $this->returnError($sourceEntry ?? null);
@@ -114,7 +122,6 @@ class TranslationController extends Controller
 
     public function actionAssets()
     {
-        // TODO: run check to see if we have an API key
         try {
             $entryId = Craft::$app->getRequest()->getRequiredQueryParam('entry');
             $sourceSiteId = Craft::$app->getRequest()->getRequiredQueryParam('sourceLocale');
@@ -126,6 +133,15 @@ class TranslationController extends Controller
 
             $sourceEntry = Asset::findOne(['id' => $entryId, 'siteId' => $sourceSiteId, 'status' => null]);
             $targetEntry = Asset::findOne(['id' => $entryId, 'siteId' => $destinationSiteId, 'status' => null]);
+
+            if (!$sourceEntry || !$targetEntry) {
+                return $this->returnError();
+            }
+
+            $user = Craft::$app->getUser()->getIdentity();
+            if (!$sourceEntry->canView($user) || !$targetEntry->canSave($user)) {
+                throw new ForbiddenHttpException('User not authorized to translate this asset.');
+            }
 
             //TODO Handle different section propagation methods ?
 
@@ -143,6 +159,8 @@ class TranslationController extends Controller
             $newValues = Deepl::getInstance()->mapper->entryMapper($sourceEntry, $targetEntry);
 
             $targetEntry->setFieldValues($newValues);
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
         } catch (Exception $e) {
             $this->returnError($sourceEntry);
         }
